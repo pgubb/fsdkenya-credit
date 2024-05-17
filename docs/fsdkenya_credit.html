@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.554">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>The credit landscape in Kenya: Evidence from FinAccess</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#how-large-is-the-market-for-loans-in-kenya" id="toc-how-large-is-the-market-for-loans-in-kenya" class="nav-link" data-scroll-target="#how-large-is-the-market-for-loans-in-kenya">1. How large is the market for loans in Kenya?</a></li>
+  <li><a href="#how-prevalent-are-different-forms-of-borrowing-among-adults" id="toc-how-prevalent-are-different-forms-of-borrowing-among-adults" class="nav-link" data-scroll-target="#how-prevalent-are-different-forms-of-borrowing-among-adults">2. How prevalent are different forms of borrowing among adults?</a></li>
+  <li><a href="#why-do-adults-borrow" id="toc-why-do-adults-borrow" class="nav-link" data-scroll-target="#why-do-adults-borrow">3. Why do adults borrow?</a></li>
+  <li><a href="#how-many-adults-have-difficulty-repaying-debt-and-why" id="toc-how-many-adults-have-difficulty-repaying-debt-and-why" class="nav-link" data-scroll-target="#how-many-adults-have-difficulty-repaying-debt-and-why">4. How many adults have difficulty repaying debt and why?</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The credit landscape in Kenya: Evidence from FinAccess</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The objective of this brief is to use nationally representative survey data to describe the market for credit in Kenya. How many adults use loans? Where do they borrow from? How much and why do they borrow?</p>
+</section>
+<section id="how-large-is-the-market-for-loans-in-kenya" class="level2">
+<h2 class="anchored" data-anchor-id="how-large-is-the-market-for-loans-in-kenya">1. How large is the market for loans in Kenya?</h2>
+<p>An estimated 76 million loans in Kenya were taken by borrowers in 2021.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Over half of these loans (54%) were mobile money overdrafts using M-PESA’s Fuliza service, and a further 12 percent were digital loans from mobile banking services (11%) or fintech apps (1%) (<a href="#fig-marketbyvol" class="quarto-xref">Figure&nbsp;1</a>). Social networks (friends, family and neihbors) accounted for 20% of loans disbursed, while other informal sources such as Chamas (voluntary savings or investment groups), shopkeepers, employers or buyers collectively contributed around 10%. The data highlights that two-thirds of the demand for cash loans (by volume) in Kenya is satisfied through digital sources of credit, highlighting the significant role of mobile lending platforms in the market.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-marketbyvol" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marketbyvol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-marketbyvol-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-1" data-gallery="quarto-lightbox-gallery-1"><img src="fsdkenya_credit_files/figure-html/fig-marketbyvol-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marketbyvol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The market for loans by volume
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Between 2019 and 2021, the total volume of loans disbursed in Kenya decreased by 10%, from 83.1 million to 75.8 million. Digital loans remained the dominant form of borrowing, though their share declined from 74% (61.2 million) in 2019 to 66% (50 million) in 2021. The use of social networks for borrowing increased significantly, rising from 13% (10.3 million) in 2019 to 21% (15.5 million) in 2021. The volume of traditional loans from financial institutions (Banks, Saccos, MFIs) fell by nearly 1 million and their market share fell from 4% to 3%.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-marketbyvolbyyear" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marketbyvolbyyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-marketbyvolbyyear-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-2" data-gallery="quarto-lightbox-gallery-2"><img src="fsdkenya_credit_files/figure-html/fig-marketbyvolbyyear-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marketbyvolbyyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: The market for loans by volume, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-marketbyvolbywealthyear" class="quarto-xref">Figure&nbsp;3</a> breaks the total volume of loans disbursed by both the source of the loan and the borrower’s household wealth <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-marketbyvolbywealthyear" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marketbyvolbywealthyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-marketbyvolbywealthyear-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-3" data-gallery="quarto-lightbox-gallery-3"><img src="fsdkenya_credit_files/figure-html/fig-marketbyvolbywealthyear-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marketbyvolbywealthyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: The market for loans by volume and borrower’s household wealth, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>A total of KSh 978 billion was disbursed by lenders in 2021 (<a href="#fig-marketbyval" class="quarto-xref">Figure&nbsp;4</a>). Banks were the largest source, disbursing KSh 340.4 billion (35%), followed by Sacco/MFIs at KSh 263.35 billion (27%). Digital loans, including mobile banking, Fuliza and lending apps, accounted for a combined value of KSh 113 billion (12%), while informal lenders including social network, chama and shopkeeper loans accounted for KSh 186 billion (19%).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-marketbyval" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marketbyval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-marketbyval-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-4" data-gallery="quarto-lightbox-gallery-4"><img src="fsdkenya_credit_files/figure-html/fig-marketbyval-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marketbyval-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: The market for loans by value, 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Compared to 2019, the total value of loans disbursed in 2021 fell by 30% (from KSh 1,420.5 to KSh 978 billion) (<a href="#fig-marketbyvalbyyear" class="quarto-xref">Figure&nbsp;5</a>). Much of this decline is attributable to Bank lending which fell by over KSh 300 billion (from KSh 690 to 340 billion) and Sacco lending which fell by nearly KSh 100 billion. Loans from social networks partially offset this decline, which increased from KSh 80 billion (6% of the total) in 2019 to KSh 113 billion (12%) in 2021.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-marketbyvalbyyear" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marketbyvalbyyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-marketbyvalbyyear-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-5" data-gallery="quarto-lightbox-gallery-5"><img src="fsdkenya_credit_files/figure-html/fig-marketbyvalbyyear-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marketbyvalbyyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: The market for loans by value, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-marketbyvalbywealthyear" class="quarto-xref">Figure&nbsp;6</a> breaks the total value of loans disbursed by both the source of the loan and the borrower’s household wealth and shows that the majority of the decline in the value of loan disbursements resulted from less credit flowing to borrowers in households ranking in the top 20% of the wealth distribution. The total value of Bank, Sacco and digital loans channeled to these wealthier borrowers collapsed by around 50% (from KSh 908 to Ksh 463 billion) between 2019 and 2021, while loans from friends and family rose by 50% (from KSh 33 to Ksh 50 billion). In contrast, the total value of loans disbursed to borrowers in households ranking the bottom 40% of the wealth distribution almost doubled, rising from KSh 56.1 billion in 2019 to KSh 98.1 billion in 2021.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-marketbyvalbywealthyear" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marketbyvalbywealthyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-marketbyvalbywealthyear-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-6" data-gallery="quarto-lightbox-gallery-6"><img src="fsdkenya_credit_files/figure-html/fig-marketbyvalbywealthyear-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marketbyvalbywealthyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: The market for loans by volume, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-marketbysizesource" class="quarto-xref">Figure&nbsp;7</a> shows the distribution of loans by the amount borrowed (the loan principal) and the source of the loan for 2019 and 2021. A dominant majority of loans (nearly 60%) were less than KSh 2,500 in both 2019 and 2021, just over 20 percent were between KSh 2,500 and KSh 10,000 and 15 percent were between KSh 10,000 and KSh 50,000. Shopkeeper loans and digital loans dominate the market for small loans while formal, non-digital loans from Banks and Saccos dominate the market for large loans. Between 2019 and 2021, the distribution of loans shifted moderately to smaller loans as the share of loans greater than KSh 50,000 fell. In 2021, Fuliza accounted for nearly 1 in 3 loans less than KSh 2,500 and appears to be crowding out shopkeeper credit whose share fell from 33.6% of small loans (&lt; KSh 2,500) in 2019 to 23.4% of small loans in 2021 <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-marketbysizesource" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marketbysizesource-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-marketbysizesource-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-7" data-gallery="quarto-lightbox-gallery-7"><img src="fsdkenya_credit_files/figure-html/fig-marketbysizesource-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marketbysizesource-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Loans by size and source, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="how-prevalent-are-different-forms-of-borrowing-among-adults" class="level2">
+<h2 class="anchored" data-anchor-id="how-prevalent-are-different-forms-of-borrowing-among-adults">2. How prevalent are different forms of borrowing among adults?</h2>
+<p>In 2021, 56% of Kenyan adults were either currently borrowing or had attempted to borrow in the past year, with similar proportions for both men and women (<a href="#fig-borrprevbytype" class="quarto-xref">Figure&nbsp;8</a>). Two-thirds of these borrowers used informal options such as social networks, chamas, private moneylenders, employers, or buyers to address their credit needs. Forty percent of this demand was satisfied by digital options, such as mobile banking, apps or Fuliza and 16 percent was met by traditional (non-digital) loans originating from financial institutions (commercial banks, SACCOs or MFIs). Between 2019 and 2021, the prevalence of bororwing increased from 52 to 56 percent, with digital lending sources driving this growing demand for borrowing.</p>
+<p>Fuliza (M-Pesa’s mobile money overdraft service) saw a notable penetration into the credit market, with 18% of adults using it in 2021 (<a href="#fig-borrprevbylender" class="quarto-xref">Figure&nbsp;9</a>). While the share of adults using loans from mobile banking services remained stable (9%), the share of adults borrowing from digital lending apps fell from 7% to 2% between 2019 and 2021. The share of adults borrowing from their social networks doubled from 8% to 16%. Overall, however, shopkeeper credit (including both cash loans and purchase of goods on credit) remained the most prevalent form of borrowing (30% of adults used shopkeeper credit in 2021).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-borrprevbytype" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-borrprevbytype-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-borrprevbytype-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-8" data-gallery="quarto-lightbox-gallery-8"><img src="fsdkenya_credit_files/figure-html/fig-borrprevbytype-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-borrprevbytype-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: Prevalence of borrowing by source of loan and gender, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-borrprevbylender" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-borrprevbylender-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-borrprevbylender-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-9" data-gallery="quarto-lightbox-gallery-9"><img src="fsdkenya_credit_files/figure-html/fig-borrprevbylender-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-borrprevbylender-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Prevalence of borrowing, by lender and gender, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-borrportfolio" class="quarto-xref">Figure&nbsp;10</a> the share of borrowers in one of three mutually exclusive groups defined by the most formal loan used by the borrower. In 2021, the most common type of borrower used loans exclusively from informal sources. For 38 percent of borrowers, digital loans are the only formal loan they use, one in five borrowers rely exclusively on digital loans to meet their financing needs.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-borrportfolio" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-borrportfolio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-borrportfolio-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-10" data-gallery="quarto-lightbox-gallery-10"><img src="fsdkenya_credit_files/figure-html/fig-borrportfolio-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-borrportfolio-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Loan portfolio type, 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In 2021, users of Fuliza borrowed an average of 7.2 times per year, significantly more frequently than borrowers from other lenders (<a href="#fig-nloanspyear" class="quarto-xref">Figure&nbsp;11</a>). Loans from social networks were the second most frequent source, with an average of 3.4 loans per year, followed by mobile banking (2 loans), and Chama groups (1.9 loans). Other sources, such as fintech apps, private moneylenders, employers or buyers, and SACCOs/MFIs, averaged between 1.1 to 1.6 loans per year. This data underscores the high reliance on Fuliza for frequent, short-term credit needs.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-nloanspyear" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nloanspyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-nloanspyear-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-11" data-gallery="quarto-lightbox-gallery-11"><img src="fsdkenya_credit_files/figure-html/fig-nloanspyear-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nloanspyear-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: Average number of loans taken per year among borrowers, 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="why-do-adults-borrow" class="level2">
+<h2 class="anchored" data-anchor-id="why-do-adults-borrow">3. Why do adults borrow?</h2>
+<p>In both 2019 and 2021, the primary and increasingly common reason for borrowing in Kenya was for basic consumption, with the poorest 40% of the population being the most frequent borrowers for this purpose (69% in 2019 and 62% in 2021) (<a href="#fig-reasonsforborrowing" class="quarto-xref">Figure&nbsp;12</a>). The middle 40% and richest 20% also borrowed significantly for basic consumption, though to a slightly lesser extent. Educational expenses were the second most common reason for borrowing, with an increase between 2019 and 2021 evident among all wealth groups. Borrowing for business or farm investment decreased moderately between 2019 and 2021.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-reasonsforborrowing" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-reasonsforborrowing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-reasonsforborrowing-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-12" data-gallery="quarto-lightbox-gallery-12"><img src="fsdkenya_credit_files/figure-html/fig-reasonsforborrowing-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reasonsforborrowing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12: Borrowers by main reason for taking loans by household wealth, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In 2021, borrowers in Kenya cited convenience and ease of obtaining a loan as the primary reasons for considering a lender their most important. Fuliza had the highest percentage of borrowers (60%) valuing convenience, followed by mobile banks (50%) and fintech apps (42%) (<a href="#fig-valuedfeatures" class="quarto-xref">Figure&nbsp;13</a>). Affordability, in terms of low fees and repayments, was another significant factor, especially for SACCOs/MFIs (25%). Ease of use and the ability to make repayments were particularly important for borrowers from informal sources such as social networks (37%), shopkeepers (23%) and employers or buyers (32%), which likely appreciate the flexibility these lenders can afford. Features suited to individual needs, including privacy, were a key consideration for borrowers using fintech apps (34%) and personal or business loans from bank (31%). Trust is rarely cited as a reason people value a lender, with the highest being employer or buyer loans (12%). Overall, the data highlights that while convenience remains the predominant factor in lender importance, affordability and ease of repayments also play crucial roles in shaping borrower preferences.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-valuedfeatures" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-valuedfeatures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-valuedfeatures-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-13" data-gallery="quarto-lightbox-gallery-13"><img src="fsdkenya_credit_files/figure-html/fig-valuedfeatures-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-valuedfeatures-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13: Loan features valued by borrowers, 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="how-many-adults-have-difficulty-repaying-debt-and-why" class="level2">
+<h2 class="anchored" data-anchor-id="how-many-adults-have-difficulty-repaying-debt-and-why">4. How many adults have difficulty repaying debt and why?</h2>
+<p>Between 2019 and 2021, the median loan size among borrowers increased from KSh 3,500 to KSh 4,000 and the percentage of adults with some outstanding debt rose from 40.6% to 49.5%. However,the median outstanding debt declined from KSh 2,700 in 2019 to KSh 2,000 in 2019, consistent with greater use of smaller-value short term loans and less use of larger-value long-term loans.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-debtstatus" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-debtstatus-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-debtstatus-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-14" data-gallery="quarto-lightbox-gallery-14"><img src="fsdkenya_credit_files/figure-html/fig-debtstatus-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-debtstatus-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14: Debt and delinquencies by lender, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In 2021, about 1 in 3 Kenyan adults were either having trouble repaying on time or in full (delinquent) or had to resort to adverse repayment strategies (such as reducing food expenditures, selling assets or borrowing more) (<a href="#fig-debtstress" class="quarto-xref">Figure&nbsp;15</a>). Overall the prevalence of debt stress rose between 2019 to 2021 from 31 to 34%, rising most sharply among richest 20% of adults.</p>
+<p>In 2021, “Using up all my money for basic needs” (46%) and “Did not plan well enought” (26%) were the two main reasons for failure to repay a loan on time and as agreed. Income declines and poor business performance was also a significant factor, particularly among adults in the highest income quintile. While the data for 2019 is not strictly consistent with 2021 as the reasons were collected for borrowers who reported defaulting on a loan, the patterns suggest the increasing role (from 2019 to 2021) of expenditure pressures forcing borrowers to prioritize basic consumption over debt repayment.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-debtstress" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-debtstress-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="fsdkenya_credit_files/figure-html/fig-debtstress-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-15" data-gallery="quarto-lightbox-gallery-15"><img src="fsdkenya_credit_files/figure-html/fig-debtstress-1.png" class="img-fluid figure-img" width="1152"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-debtstress-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;15: Prevalence of debt stress and reasons for loan defaults and delinquency, 2019 and 2021
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+
+
+<div class="hidden" aria-hidden="true">
+<span class="glightbox-desc lightbox-desc-1">Figure&nbsp;1: The market for loans by volume</span>
+<span class="glightbox-desc lightbox-desc-2">Figure&nbsp;2: The market for loans by volume, 2019 and 2021</span>
+<span class="glightbox-desc lightbox-desc-3">Figure&nbsp;3: The market for loans by volume and borrower’s household wealth, 2019 and 2021</span>
+<span class="glightbox-desc lightbox-desc-4">Figure&nbsp;4: The market for loans by value, 2021</span>
+<span class="glightbox-desc lightbox-desc-5">Figure&nbsp;5: The market for loans by value, 2019 and 2021</span>
+<span class="glightbox-desc lightbox-desc-6">Figure&nbsp;6: The market for loans by volume, 2019 and 2021</span>
+<span class="glightbox-desc lightbox-desc-7">Figure&nbsp;7: Loans by size and source, 2019 and 2021</span>
+<span class="glightbox-desc lightbox-desc-8">Figure&nbsp;8: Prevalence of borrowing by source of loan and gender, 2019 and 2021</span>
+<span class="glightbox-desc lightbox-desc-9">Figure&nbsp;9: Prevalence of borrowing, by lender and gender, 2019 and 2021</span>
+<span class="glightbox-desc lightbox-desc-10">Figure&nbsp;10: Loan portfolio type, 2021</span>
+<span class="glightbox-desc lightbox-desc-11">Figure&nbsp;11: Average number of loans taken per year among borrowers, 2021</span>
+<span class="glightbox-desc lightbox-desc-12">Figure&nbsp;12: Borrowers by main reason for taking loans by household wealth, 2019 and 2021</span>
+<span class="glightbox-desc lightbox-desc-13">Figure&nbsp;13: Loan features valued by borrowers, 2021</span>
+<span class="glightbox-desc lightbox-desc-14">Figure&nbsp;14: Debt and delinquencies by lender, 2019 and 2021</span>
+<span class="glightbox-desc lightbox-desc-15">Figure&nbsp;15: Prevalence of debt stress and reasons for loan defaults and delinquency, 2019 and 2021</span>
+</div>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>This total excludes purchases of goods on credit from shopkeepers, credit cards and loans from buyers of agricultural produce<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Household wealth is proxied using data on the quality of housing conditions and household ownership of physical assets<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>This figure includes both cash loans from shopkeepers as well as purchases of goods and services on credit<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","openEffect":"zoom","loop":false,"descPosition":"bottom"});
+window.onload = () => {
+  lightboxQuarto.on('slide_before_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    const href = trigger.getAttribute('href');
+    if (href !== null) {
+      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+      if (imgEl !== null) {
+        const srcAttr = imgEl.getAttribute("src");
+        if (srcAttr && srcAttr.startsWith("data:")) {
+          slideConfig.href = srcAttr;
+        }
+      }
+    } 
+  });
+
+  lightboxQuarto.on('slide_after_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    if (window.Quarto?.typesetMath) {
+      window.Quarto.typesetMath(slideNode);
+    }
+  });
+
+};
+          </script>
+
+
+
+
+</body></html>

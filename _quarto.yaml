@@ -1,0 +1,14 @@
+
+project:
+  type: website
+  output-dir: docs
+  
+title: "The credit landscape in Kenya: Evidence from FinAccess"
+lightbox: true
+
+format: 
+  html:
+    keep-md: true
+    toc: true
+    toc-depth: 6
+    toc-location: left
