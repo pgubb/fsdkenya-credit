@@ -821,7 +821,7 @@ prep_loans_data_2019 <- function(data, borrower_data) {
 
   # Analysis variables
   statvars <- borrower_data %>% dplyr::select(year, year_fct, hh_id, mem_id, psu, probweights)
-  byvars <- borrower_data %>% dplyr::select(hh_id, mem_id, fullsample, hh_geo_fct, hh_geo2_fct, resp_income_w_pred, resp_inc_group_fct, resp_gender_fct, hh_wlth_group, resp_live_group2_fct, asset_mobile_smart)
+  byvars <- borrower_data %>% dplyr::select(hh_id, mem_id, fullsample, hh_geo_fct, hh_geo2_fct, resp_income_w_pred, resp_inc_group_fct, resp_gender_fct, hh_wlth_group, resp_live_group_fct, resp_live_group2_fct, asset_mobile_smart)
 
   data <- data %>%
     mutate(

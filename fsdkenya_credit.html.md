@@ -8,8 +8,7 @@ The objective of this brief is to use nationally representative survey data to d
 
 ## 1. How large is the market for loans in Kenya? 
 
-An estimated 76 million loans in Kenya were taken by borrowers in 2021.^[This total excludes purchases of goods on credit from shopkeepers, credit cards and loans from buyers of agricultural produce]. Over half of these loans (54%) were mobile money overdrafts using M-PESA’s Fuliza service, and a further 12 percent were digital loans from mobile banking services (11%) or fintech apps (1%) (@fig-marketbyvol). Social networks (friends, family and neihbors) accounted for 20% of loans disbursed, while other informal sources such as Chamas (voluntary savings or investment groups), shopkeepers, employers or buyers collectively contributed around 10%. The data highlights that two-thirds of the demand for cash loans (by volume) in Kenya is satisfied through digital sources of credit, highlighting the significant role of mobile lending platforms in the market.
-
+An estimated 76 million loans in Kenya were taken by borrowers in 2021.^[This total excludes purchases of goods on credit from shopkeepers, credit cards and loans from buyers of agricultural produce]. Over half of these loans (54%) were mobile money overdrafts using M-PESA’s Fuliza service, and a further 12 percent were digital loans from mobile banking services (11%) or fintech apps (1%) (@fig-marketbyvol). Social networks (friends, family and neihbors) accounted for 20% of loans disbursed, while other informal sources such as Chamas (voluntary savings or investment groups), shopkeepers, employers or buyers collectively contributed around 10%. The big picture that the data highlights is that that two-thirds of the demand for cash loans (by volume) in Kenya in 2021 was mediated through digital technologies, 30% was mediated through informal or relational agreements and 5% was mediated through traditional loan contracts at a financial institution.
 
 
 ::: {.cell}
@@ -29,7 +28,8 @@ Between 2019 and 2021, the total volume of loans disbursed in Kenya decreased by
 :::
 
 
-@fig-marketbyvolbywealthyear breaks the total volume of loans disbursed by both the source of the loan and the borrower's household wealth ^[Household wealth is proxied using data on the quality of housing conditions and household ownership of physical assets].
+@fig-marketbyvolbywealthyear breaks the total volume of loans disbursed by both the source of the loan and the borrower's household wealth ^[Household wealth is proxied using data on the quality of housing conditions and household ownership of physical assets]. Between 2019 and 2021, while the total volume of loans used by borrowers in the middle 40% and upper 20% of the household wealth distribution remained steady, the volume of loans used by borrowers in the poorest 40% of the distribution fell by 30% (from 22.4 million to 16.1 million loans). The drop is a result of significantly lower disbursements to poorer borrowers from digital lending services. 
+
 
 
 ::: {.cell}
@@ -39,8 +39,8 @@ Between 2019 and 2021, the total volume of loans disbursed in Kenya decreased by
 :::
 
 
-A total of KSh 978 billion was disbursed by lenders in 2021 (@fig-marketbyval). Banks were the largest source, disbursing KSh 340.4 billion (35%), followed by Sacco/MFIs at KSh 263.35 billion (27%). Digital loans, including mobile banking, Fuliza and lending apps, accounted for a combined value of KSh 113 billion (12%), while informal lenders including social network, chama and shopkeeper loans accounted for KSh 186 billion (19%). 
 
+A total of KSh 978 billion was disbursed by lenders in 2021 (@fig-marketbyval). Banks were the largest source, disbursing KSh 340.4 billion (35%), followed by Sacco/MFIs at KSh 263.35 billion (27%). Digital loans, including mobile banking, Fuliza and lending apps, accounted for a combined value of KSh 113 billion (12%), while informal lenders including social network, chama and shopkeeper loans accounted for KSh 186 billion (20%). The market for loans from a value perspective, is the mirror image of the volume perspective. Lending mediated through in-person agreements at formal financial institutions, while accounting for less then 5% of the volume, accounts for over two thirds of the total value of lending. Digital loans, while accounting for two-thirds of the volume accounts for 12% of the total value of lending.  
 
 
 ::: {.cell}
@@ -48,6 +48,7 @@ A total of KSh 978 billion was disbursed by lenders in 2021 (@fig-marketbyval). 
 ![The market for loans by value, 2021](fsdkenya_credit_files/figure-html/fig-marketbyval-1.png){#fig-marketbyval width=1152}
 :::
 :::
+
 
 Compared to 2019, the total value of loans disbursed in 2021 fell by 30% (from KSh 1,420.5 to KSh 978 billion) (@fig-marketbyvalbyyear). Much of this decline is attributable to Bank lending which fell by over KSh 300 billion (from KSh 690 to 340 billion) and Sacco lending which fell by nearly KSh 100 billion. Loans from social networks partially offset this decline, which increased from KSh 80 billion (6% of the total) in 2019 to KSh 113 billion (12%) in 2021. 
 
@@ -65,6 +66,16 @@ Compared to 2019, the total value of loans disbursed in 2021 fell by 30% (from K
 ::: {.cell}
 ::: {.cell-output-display}
 ![The market for loans by volume, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-marketbyvalbywealthyear-1.png){#fig-marketbyvalbywealthyear width=1152}
+:::
+:::
+
+
+@fig-marketbyvalbyliveyear reveals lending to business owners fell by 70%, from KSh 579 billion to KSh 184 billion between 2019 and 2021. This decline was overwhelmingly a result of bank lending to business owners collapsing by 90 percent. Another factor contributes to the lower value of lending to businesses: the share of adults deriving most of their income from their business fell from 17 to 14% between 2019 and 2021 (among the wealthiest 20% of households, the share fell from 30 to 22%). 
+
+
+::: {.cell}
+::: {.cell-output-display}
+![The market for loans by volume, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-marketbyvalbyliveyear-1.png){#fig-marketbyvalbyliveyear width=1152}
 :::
 :::
 
@@ -100,7 +111,7 @@ Fuliza (M-Pesa's mobile money overdraft service) saw a notable penetration into 
 :::
 
 
-@fig-borrportfolio the share of borrowers in one of three mutually exclusive groups defined by the most formal loan used by the borrower. In 2021, the most common type of borrower used loans exclusively from informal sources. For 38 percent of borrowers, digital loans are the only formal loan they use, one in five borrowers rely exclusively on digital loans to meet their financing needs.
+@fig-borrportfolio shows the share of borrowers in one of three mutually exclusive groups defined by the most formal loan used. In 2021, the most common type of borrower used loans exclusively from informal sources. For 38 percent of borrowers, digital loans are the only formal loan they use, one in five borrowers rely exclusively on digital loans to meet their financing needs.
 
 
 ::: {.cell}
@@ -110,7 +121,7 @@ Fuliza (M-Pesa's mobile money overdraft service) saw a notable penetration into 
 :::
 
 
-In 2021, users of Fuliza borrowed an average of 7.2 times per year, significantly more frequently than borrowers from other lenders (@fig-nloanspyear). Loans from social networks were the second most frequent source, with an average of 3.4 loans per year, followed by mobile banking (2 loans), and Chama groups (1.9 loans). Other sources, such as fintech apps, private moneylenders, employers or buyers, and SACCOs/MFIs, averaged between 1.1 to 1.6 loans per year. This data underscores the high reliance on Fuliza for frequent, short-term credit needs. 
+In 2021, users of Fuliza borrowed an average of 7.2 times per year, significantly more frequently than borrowers from other lenders (@fig-nloanspyear). Loans from social networks were the second most frequently used source, with an average of 3.4 loans per year, followed by mobile banking (2 loans), and Chama groups (1.9 loans). Other sources, such as fintech apps, private moneylenders, employers or buyers, and SACCOs/MFIs, averaged between 1.1 to 1.6 loans per year. This data underscores the high reliance on Fuliza for frequent, short-term credit needs. 
 
 
 ::: {.cell}
@@ -122,7 +133,7 @@ In 2021, users of Fuliza borrowed an average of 7.2 times per year, significantl
 
 ## 3. Why do adults borrow? 
 
-In both 2019 and 2021, the primary and increasingly common reason for borrowing in Kenya was for basic consumption, with the poorest 40% of the population being the most frequent borrowers for this purpose (69% in 2019 and 62% in 2021) (@fig-reasonsforborrowing). The middle 40% and richest 20% also borrowed significantly for basic consumption, though to a slightly lesser extent. Educational expenses were the second most common reason for borrowing, with an increase between 2019 and 2021 evident among all wealth groups. Borrowing for business or farm investment decreased moderately between 2019 and 2021. 
+In both 2019 and 2021, the primary reason for borrowing in Kenya was for basic consumption, with the poorest 40% of the population being the most frequent borrowers for this purpose (69% in 2019 and 62% in 2021) (@fig-reasonsforborrowing). The middle 40% and richest 20% also borrowed significantly for basic consumption, though to a slightly lesser extent. Educational expenses were the second most common reason for borrowing, with an increase between 2019 and 2021 evident among all wealth groups. Borrowing for business or farm investment decreased moderately between 2019 and 2021. 
 
 
 
@@ -146,7 +157,7 @@ In 2021, borrowers in Kenya cited convenience and ease of obtaining a loan as th
 
 ## 4. How many adults have difficulty repaying debt and why?
 
-Between 2019 and 2021, the median loan size among borrowers increased from KSh 3,500 to KSh 4,000 and the percentage of adults with some outstanding debt rose from 40.6% to 49.5%. However,the median outstanding debt declined from KSh 2,700 in 2019 to KSh 2,000 in 2019, consistent with greater use of smaller-value short term loans and less use of larger-value long-term loans. 
+Between 2019 and 2021, the median loan size among borrowers increased from KSh 3,500 to KSh 4,000 and the percentage of adults with some outstanding debt rose from 40.6% to 49.5%. However, the median outstanding debt declined from KSh 2,700 in 2019 to KSh 2,000 in 2019, consistent with substantial rise in shorter-term loans, in particular Fuliza and shopkeeper credit. Total outstanding debt as a share of personal monthly income among borrowers remained at around 40% in 2019 and 2021 (@fig-debtstatus).
 
 
 
@@ -157,9 +168,11 @@ Between 2019 and 2021, the median loan size among borrowers increased from KSh 3
 :::
 
 
-In 2021, about 1 in 3 Kenyan adults were either having trouble repaying on time or in full (delinquent) or had to resort to adverse repayment strategies (such as reducing food expenditures, selling assets or borrowing more) (@fig-debtstress). Overall the prevalence of debt stress rose between 2019 to 2021 from 31 to 34%,  rising most sharply among richest 20% of adults. 
+In 2021, about 1 in 3 Kenyan adults were either having trouble repaying on time or in full (delinquent) or had to resort to adverse repayment strategies (such as reducing food expenditures, selling assets or borrowing more) (@fig-debtstress). Overall the prevalence of debt stress rose between 2019 to 2021 from 31 to 34%,  rising most sharply among the richest 20% of adults. 
 
-In 2021, "Using up all my money for basic needs" (46%) and "Did not plan well enought" (26%) were the two main reasons for failure to repay a loan on time and as agreed. Income declines and poor business performance was also a significant factor, particularly among adults in the highest income quintile. While the data for 2019 is not strictly consistent with 2021 as the reasons were collected for borrowers who reported defaulting on a loan, the patterns suggest the increasing role (from 2019 to 2021) of expenditure pressures forcing borrowers to prioritize basic consumption over debt repayment. 
+In 2019, 17.4 % of borrowers reported that they had defaulted at least once on a loan in the past year. In 2021, 58% of borrowers reported they had either "paid late, missed a payment, paid less or never paid" a loan in the past year (@fig-debtstatus). In 2021, the highest incidence of delinquent repayment behavior was associated with mobile banking loans (74%), social network loanss (64%) and apps (63%) while the lowest incidence of delinquent repayment behavior was associated with shopkeeper credit (21.%).
+
+In 2021, "Using up all my money for basic needs" (46%) and "Did not plan well enought" (26%) were the two main reasons for failure to repay a loan on time and as agreed. Income declines and poor business performance were also signifant factors, particularly among adults in the highest income quintile. While the data for 2019 is not strictly consistent with 2021 as the reasons were collected for borrowers who reported defaulting on a loan, the patterns suggest the increasing role (from 2019 to 2021) of expenditure pressures forcing borrowers to prioritize basic consumption over debt repayment. 
 
 
 

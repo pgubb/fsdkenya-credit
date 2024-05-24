@@ -95,7 +95,7 @@ INDICATORS_REFLIST_LVL_BORR <- c(
   "debt_high" = "Outstanding debt > 50% of monthly income",
   "debt_repaystress" = "Debt repayment stress", # Borrowed, sold assets, reduced food expenditures
   "debt_default" = "Has defaulted on loan", # Didn't pay only
-  "debt_delinquent" = "Delinquent loan payment", # Didn't pay, paid late, missed a payment, paid less
+  "debt_delinquent" = "Any delinquent loan payment", # Didn't pay, paid late, missed a payment, paid less
   "debt_stressany" = "Repayment stress or default",
   "debt_monthly_repayment" = "Monthly debt repayment",
   "debt_monthly_repayment_high" = "Monthly debt repayment > 50% monthly income",
@@ -149,7 +149,14 @@ INDICATORS_REFLIST_LVL_BORR <- c(
   "debt_default_reason_5" = "All money used up for basic needs (eg food or utility bills)",
   "debt_default_reason_6" = "Had to pay off other loans",
   "debt_default_reason_7" = "Unexpected emergency expenditure",
-  "debt_default_reason_8" = "Other"
+  "debt_default_reason_8" = "Other", 
+  
+  "resp_live_group_cwrk" = "Casual work",
+  "resp_live_group_empl" = "Employment",
+  "resp_live_group_farm" = "Agriculture", 
+  "resp_live_group_othr" = "Other", 
+  "resp_live_group_owbs" = "Own business", 
+  "resp_live_group_trns" = "Transfers" 
 
 )
 

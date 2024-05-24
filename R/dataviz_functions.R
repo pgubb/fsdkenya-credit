@@ -246,7 +246,7 @@ fig_bar_loans_by_slice <- function(data, indicators, slicevar, groups, plot_text
 }
 
 # Function to create conmposite comparing across household wealth quintiles
-fig_bar_loans_by_hhwlth_year <- function(data, indicators, slicevar, groups, main_plot_text, plot_label) {
+fig_bar_loans_by_slice_year <- function(data, indicators, slicevar, groups, main_plot_text, plot_label) {
 
   plot_text <- list(
     subtitle = "2019",
@@ -878,7 +878,7 @@ fig_tile_debt_overview <- function(data, borrower_data, indicators, slicevar, gr
          w = "probweights"
     )
   ) %>% rename(!!slicevar := group_cat_val, group_cat_val = indicator_name) %>%
-    mutate(indicator = "delinquent", indicator_name = "Delinquent payment (% of borrowers)")
+    mutate(indicator = "delinquent", indicator_name = "Delinquent payment (% of borrowers)*")
 
 
   chart_df <- results %>% bind_rows(defaults) %>%
@@ -889,8 +889,8 @@ fig_tile_debt_overview <- function(data, borrower_data, indicators, slicevar, gr
     ) %>%
     group_by(!!slicevar, indicator) %>%
     mutate(
-      mean_std = mean/(max(mean)),
-      value_fill = ifelse(indicator %in% c("has_debt", "debt_balance_cd", "debt_balance_income_cd", "delinquent"), mean_std, NA),
+      value_std = value/(max(value)),
+      value_fill = ifelse(indicator %in% c("has_debt", "debt_balance_cd", "debt_balance_income_cd", "delinquent"), value_std, NA),
       xcats = factor(str_wrap(indicator_name, 12), str_wrap(unique(indicator_name), 12))
     ) %>% ungroup() %>%
     group_by(group_cat_val) %>%
@@ -1341,4 +1341,48 @@ fig3 <- function(data, indicators, groups, plot_text) {
   return(p)
 
 }
+
+
+# Main livelihoods by year (% of adults)
+
+# figlivebyyear <- function(data, indicators) { 
+#   
+#   
+#   }
+# 
+# data <- borrower_data_pool
+# indicators <- "resp_live_group"
+# groups <- c("fullsample" = "All adults", "hh_wlth_group" = "Household wealth group")
+# indicators <- names(INDICATORS_REFLIST_LVL_BORR[str_detect(names(INDICATORS_REFLIST_LVL_BORR), paste(indicators, collapse = '|'))])
+# combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
+# is <- combinations[[1]]
+# gs <- combinations[[2]]
+# 
+# results <- dplyr::bind_rows(
+#   map2(is,
+#        gs,
+#        svy_summary_weights_v2,
+#        data = data,
+#        g_l1 = "year_fct",
+#        iref = INDICATORS_REFLIST_LVL_BORR,
+#        gref = groups,
+#        psu = "psu",
+#        strata = NULL,
+#        w = "probweights"
+#   )
+# )
+# 
+# ggplot(data = results, 
+#        aes(
+#          x = year_fct, 
+#          y = mean, 
+#          fill = indicator_name
+#        )
+#        ) + 
+#   facet_wrap(~group_cat_val, nrow = 1) + 
+#   geom_col(position = position_stack()) + 
+#   geom_text(aes(label = pctclean(mean, 0)), position = position_stack(vjust = 0.5)) + 
+#   theme_custom()
+
+
 

@@ -879,7 +879,7 @@ prep_borrower_data_2021 <- function(data) {
       # Lender: Aggregation Tier-0:
 
       # Any loan
-      debt_default_lender_agg0_any = debt_default,
+      debt_default_lender_agg0_any = debt_delinquent,
       debt_default_lender_agg0_any = ifelse(borrower_any_status == 0, NA, debt_default_lender_agg0_any),
 
       # 1) Any formal
@@ -897,7 +897,7 @@ prep_borrower_data_2021 <- function(data) {
       # Lender: Aggregation Tier-1:
 
       # Any loan
-      debt_default_lender_agg1_any = debt_default,
+      debt_default_lender_agg1_any = debt_delinquent,
       debt_default_lender_agg1_any = ifelse(borrower_any_status == 0, NA, debt_default_lender_agg1_any),
 
       # 1) Bank: personal or other
@@ -935,7 +935,7 @@ prep_borrower_data_2021 <- function(data) {
       # Lender: Aggregation Tier-2:
 
       # Any loan
-      debt_default_lender_agg2_any = debt_default,
+      debt_default_lender_agg2_any = debt_delinquent,
       debt_default_lender_agg2_any = ifelse(borrower_any_status == 0, NA, debt_default_lender_agg2_any),
 
       # 1) Bank: personal or other
@@ -981,7 +981,7 @@ prep_borrower_data_2021 <- function(data) {
       # Lender: Aggregation Tier-3:
 
       # Any loan
-      debt_default_lender_agg3_any = debt_default,
+      debt_default_lender_agg3_any = debt_delinquent,
       debt_default_lender_agg3_any = ifelse(borrower_any_status == 0, NA, debt_default_lender_agg3_any),
 
       # 1) Bank: personal or business
@@ -1132,7 +1132,7 @@ prep_loans_data_2021 <- function(data, borrower_data) {
 
   # Statistical variables and borrower characteristics from borrower-level dataset
   statvars <- borrower_data %>% dplyr::select(year, year_fct, hh_id, mem_id, psu, probweights)
-  byvars <- borrower_data %>% dplyr::select(hh_id, mem_id, fullsample, hh_geo_fct, hh_geo2_fct, resp_income_w_pred, resp_inc_group_fct, resp_gender_fct, hh_wlth_group, resp_live_group2_fct)
+  byvars <- borrower_data %>% dplyr::select(hh_id, mem_id, fullsample, hh_geo_fct, hh_geo2_fct, resp_income_w_pred, resp_inc_group_fct, resp_gender_fct, hh_wlth_group, resp_live_group_fct, resp_live_group2_fct)
 
   data <- data %>%
     mutate(
