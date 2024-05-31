@@ -94,6 +94,7 @@ INDICATORS_REFLIST_LVL_BORR <- c(
 
   "debt_high" = "Outstanding debt > 50% of monthly income",
   "debt_repaystress" = "Debt repayment stress", # Borrowed, sold assets, reduced food expenditures
+  "debt_repaystress_food" = "Reduced food expenditures to repay loan", # Borrowed, sold assets, reduced food expenditures
   "debt_default" = "Has defaulted on loan", # Didn't pay only
   "debt_delinquent" = "Any delinquent loan payment", # Didn't pay, paid late, missed a payment, paid less
   "debt_stressany" = "Repayment stress or default",

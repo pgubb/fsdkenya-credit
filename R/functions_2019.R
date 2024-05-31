@@ -593,6 +593,8 @@ prep_borrower_data_2019 <- function(data) {
 
       debt_repaystress = ifelse(e2b1 == 1 | e2b3 == 1 | e2b4 == 1, 1, 0),
       debt_repaystress = ifelse(is.na(debt_repaystress), 0, debt_repaystress),
+      debt_repaystress_food = ifelse(e2b4 == 1, 1, 0),
+      debt_repaystress_food = ifelse(is.na(debt_repaystress_food), 0, debt_repaystress_food),
       debt_delinquent = 0, # This variable is not defined for 2019, setting to 0 to avoid error when summarizing across years
       debt_default = ifelse(e2c > 0, 1, 0),
       debt_default = ifelse(is.na(debt_default), 0, debt_default),

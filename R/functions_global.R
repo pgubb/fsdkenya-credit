@@ -126,8 +126,8 @@ prep_respdebt_data <- function(borrower_data, loans_data, lendervar) {
 
   lendervar <- sym(lendervar)
 
-  alladults <- borrower_data %>% select(mem_id)
-  characteristics <- borrower_data %>% select(year, year_fct, mem_id, psu, probweights, hh_urbrur, resp_gender_fct, resp_income_w_pred)
+  alladults <- borrower_data %>% select(mem_id) 
+  characteristics <- borrower_data %>% select(year, year_fct, mem_id, psu, probweights, hh_urbrur, resp_gender_fct, resp_income_w_pred, resp_income_quintile)
 
   balances <- loans_data %>%
     select(mem_id, !!lendervar, loan_principal, loan_balance) %>%
@@ -137,9 +137,9 @@ prep_respdebt_data <- function(borrower_data, loans_data, lendervar) {
       debt_balance = sum(loan_balance, na.rm = TRUE)
     ) %>% ungroup()
 
-  debt_by_source <- left_join(alladults, balances, by = "mem_id") %>%
-    mutate(!!lendervar := ifelse(is.na(!!lendervar), "Sacco/MFI", !!lendervar)) %>%
+  debt_by_source <- left_join(alladults, balances, by = c("mem_id"))  %>%
     complete(mem_id, !!lendervar) %>%
+    filter(!is.na(!!lendervar)) %>% 
     mutate(
       loan_principal = ifelse(is.na(loan_principal), 0, loan_principal),
       debt_balance = ifelse(is.na(debt_balance), 0, debt_balance),

@@ -38,7 +38,21 @@ borrower_data_pool <- bind_rows(borrower_data, borrower_data_2019)
 loans_data_pool <- bind_rows(loans_data, loans_data_2019)
 respdebt_data_pool <- bind_rows(respdebt_data, respdebt_data_2019)
 
+# 
+respdebt_data_agg1_19 <- prep_respdebt_data(borrower_data_2019, loans_data, "lender_agg1_str") # 1 row per adult-lender aggregate
+respdebt_data_agg1_21 <- prep_respdebt_data(borrower_data, loans_data, "lender_agg1_str") # 1 row per adult-lender aggregate
+respdebt_data_agg1_pool <- bind_rows(respdebt_data_agg1_19, respdebt_data_agg1_21)
+
 ```
+
+
+## Summary 
+
+**Credit conditions during COVID-19 tightened substantially**. The market for credit experienced a sharp contraction in 2021 in concert with the economic slowdown resulting from the direct and indirect impacts of COVID-19. Despite an increase in the number of adults needing credit, the supply of credit fell. Between 2019 and 2021, the share of adults who had either attempted to borrow or were currently borrowing in the past year rose from 52 to 56%. However, over this period the total *number* of loans disbursed across all lenders declined by 10% and the total *value* of loans disbursed fell by 30%. Bank lending in particular pulled back significantly. Total bank lending to adults fell by 50% (KSh 350 billion), and this was almost entirely a reduction in lending to business owners. Lending to employed adults remained steady at KSh 258 billion in both 2019 and 2021. Other formal financial institutions also reduced lending during this period, but to a lesser degree. While total disbursements from Saccos and MFIs declined by 25 percent, their importance to business owners grew in relative terms: In 2019, the ratio of bank to Sacco/MFI loan disbursements to business owners was 7 to 1 by 2021 the ratio was 1 to 1. With more adults in need of credit and formal institutions less likely to provide financing, more borrowers (especially those among the poorest 40% and richest 20% of households) leaned on social networks to meet liquidity needs. Loans from friends, family members or neighbors rose by Ksh 33 billion (from Ksh 80 to 113 billion) between 2019 and 2021. 
+
+**Digital lending options continue to expand and uncover massive demand for short-term liquidity**. In 2021, two-thirds of the close to 80 million cash loans disbursed to Kenyan adults were mediated through digital technologies, 30% were mediated through informal or relational agreements and 5% were mediated through traditional loan contracts at a financial institution. Fuliza alone accounted for 54% of all loans disbursed in 2021, reflecting rapid adoption of the service which was launched in early 2019. In 2021, Fuliza was used by nearly 1 in 5 adults who typically borrowed Ksh 500, 7 times a year. The data suggest that Fuliza partially displaced the practice of taking goods on credit from shopkeepers (informal buy now pay later), as well as other digital lending options such as loans from mobile banking services and fintech apps. For example, the share of low-value credit (under KSh 2,500) from shopkeepers fell from 34 to 23 percent just as the share of digital loans (including Fuliza) rose from 12 to 24 percent between 2019 and 2021. 
+
+**A rising share of adults are indebted and a significant share show signs of debt stress**. Between 2019 and 2021, the share of adults with some outstanding debt increased by 22 percent, such that in 2021 nearly 50 percent of adults were carrying debt. Over this period, the share of adults reporting that they had to reduce food spending to repay a loan rose from 18 to 22%, with the largest increase among adults in the richest 20% of households (the share reporting having to cut food expenses to repay a loan rose from 15 to 25% from 2019 to 2021). 
 
 
 ## Introduction
@@ -280,6 +294,31 @@ fig_bar_loans_by_size_and_source(loans_data_pool, indicators, slicevar, groups, 
 
 ```
 
+
+```{r, fig.width = 12, fig.asp = 0.6}
+#| label: fig-loanprincipalbylender
+#| echo: false
+#| warning: false
+#| fig-cap: "Median loan principal by lender, 2019 and 2021"
+
+# Indicators used in this figure
+indicators <- c("loan_principal_cd")
+groups <- c("lender_agg3_str" = "Source of loan")
+slicevar <- c("Year" = "year_fct")
+  
+plot_text <- list(
+  title = "Figure 9",
+   subtitle = "Median loan principal by lender, 2019 & 2021",
+  yaxis = NULL,
+  xaxis = "Loan principal (KSh)",
+  caption =  paste(CAPTION)
+) 
+
+fig_bar_loansize_by_lender(respdebt_data_pool, indicators, slicevar, groups, plot_text)
+
+
+```
+
 ## 2. How prevalent are different forms of borrowing among adults?
 
 In 2021, 56% of Kenyan adults were either currently borrowing or had attempted to borrow in the past year, with similar proportions for both men and women  (@fig-borrprevbytype). Two-thirds of these borrowers used informal options such as social networks, chamas, private moneylenders, employers, or buyers to address their credit needs.  Forty percent of this demand was satisfied by digital options, such as mobile banking, apps or Fuliza and 16 percent was met by traditional (non-digital) loans originating from financial institutions (commercial banks, SACCOs or MFIs). Between 2019 and 2021, the prevalence of bororwing increased from 52 to 56 percent, with digital lending sources driving this growing demand for borrowing.
@@ -307,6 +346,31 @@ plot_text <- list(
 ) 
 
 fig_bar_borrowers_by_type(borrower_data_pool, indicators, slicevar, groups, plot_text)
+
+```
+
+```{r, fig.width = 12, fig.asp = 0.8}
+#| label: fig-borrprevbytype_gender
+#| echo: false
+#| warning: false
+#| fig-cap: "Prevalence of borrowing by source of loan and gender, 2019 and 2021"
+
+# Indicators used in this figure
+indicators <- c("has_recent_loan", "loan_principal_cd")
+groups <- c("lender_agg0_str" = "Source of loan")
+slicevar <- c("Personal monthly income" = "resp_income_quintile")
+
+respdebt_data_agg0 <- prep_respdebt_data(borrower_data, loans_data, "lender_agg0_str") # 1 row per adult-lender aggregate
+
+plot_text <- list(
+  title = "Figure 9",
+  subtitle = "",
+  yaxis = NULL, 
+  xaxis = "% of adults (18+)", 
+  caption = CAPTION
+) 
+
+fig_bar_borrowers_by_type_inc(respdebt_data_agg0, indicators, slicevar, groups, plot_text)
 
 ```
 
@@ -453,7 +517,7 @@ Between 2019 and 2021, the median loan size among borrowers increased from KSh 3
 #| warning: false
 #| fig-cap: "Debt and delinquencies by lender, 2019 and 2021"
 
-  indicators <- c("has_recent_loan", "loan_principal_cd", "has_debt", "debt_balance_cd", "debt_balance_income_cd")
+  indicators <- c("has_recent_loan", "has_debt", "debt_balance_cd", "debt_balance_income_cd")
   groups <- c("lender_agg3_str" = "Source of loan")
   slicevar <- c("Year" = "year_fct")
   

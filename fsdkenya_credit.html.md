@@ -2,6 +2,15 @@
 
 
 
+## Summary 
+
+**Credit conditions during COVID-19 tightened substantially**. The market for credit experienced a sharp contraction in 2021 in concert with the economic slowdown resulting from the direct and indirect impacts of COVID-19. Despite an increase in the number of adults needing credit, the supply of credit fell. Between 2019 and 2021, the share of adults who had either attempted to borrow or were currently borrowing in the past year rose from 52 to 56%. However, over this period the total *number* of loans disbursed across all lenders declined by 10% and the total *value* of loans disbursed fell by 30%. Bank lending in particular pulled back significantly. Total bank lending to adults fell by 50% (KSh 350 billion), and this was almost entirely a reduction in lending to business owners. Lending to employed adults remained steady at KSh 258 billion in both 2019 and 2021. Other formal financial institutions also reduced lending during this period, but to a lesser degree. While total disbursements from Saccos and MFIs declined by 25 percent, their importance to business owners grew in relative terms: In 2019, the ratio of bank to Sacco/MFI loan disbursements to business owners was 7 to 1 by 2021 the ratio was 1 to 1. With more adults in need of credit and formal institutions less likely to provide financing, more borrowers (especially those among the poorest 40% and richest 20% of households) leaned on social networks to meet liquidity needs. Loans from friends, family members or neighbors rose by Ksh 33 billion (from Ksh 80 to 113 billion) between 2019 and 2021. 
+
+**Digital lending options continue to expand and uncover massive demand for short-term liquidity**. In 2021, two-thirds of the close to 80 million cash loans disbursed to Kenyan adults were mediated through digital technologies, 30% were mediated through informal or relational agreements and 5% were mediated through traditional loan contracts at a financial institution. Fuliza alone accounted for 54% of all loans disbursed in 2021, reflecting rapid adoption of the service which was launched in early 2019. In 2021, Fuliza was used by nearly 1 in 5 adults who typically borrowed Ksh 500, 7 times a year. The data suggest that Fuliza partially displaced the practice of taking goods on credit from shopkeepers (informal buy now pay later), as well as other digital lending options such as loans from mobile banking services and fintech apps. For example, the share of low-value credit (under KSh 2,500) from shopkeepers fell from 34 to 23 percent just as the share of digital loans (including Fuliza) rose from 12 to 24 percent between 2019 and 2021. 
+
+**A rising share of adults are indebted and a significant share show signs of debt stress**. Between 2019 and 2021, the share of adults with some outstanding debt increased by 22 percent, such that in 2021 nearly 50 percent of adults were carrying debt. Over this period, the share of adults reporting that they had to reduce food spending to repay a loan rose from 18 to 22%, with the largest increase among adults in the richest 20% of households (the share reporting having to cut food expenses to repay a loan rose from 15 to 25% from 2019 to 2021). 
+
+
 ## Introduction
 
 The objective of this brief is to use nationally representative survey data to describe the market for credit in Kenya. How many adults use loans? Where do they borrow from? How much and why do they borrow? 
@@ -89,6 +98,12 @@ Compared to 2019, the total value of loans disbursed in 2021 fell by 30% (from K
 :::
 :::
 
+::: {.cell}
+::: {.cell-output-display}
+![Median loan principal by lender, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-loanprincipalbylender-1.png){#fig-loanprincipalbylender width=1152}
+:::
+:::
+
 
 ## 2. How prevalent are different forms of borrowing among adults?
 
@@ -101,6 +116,12 @@ Fuliza (M-Pesa's mobile money overdraft service) saw a notable penetration into 
 ::: {.cell}
 ::: {.cell-output-display}
 ![Prevalence of borrowing by source of loan and gender, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-borrprevbytype-1.png){#fig-borrprevbytype width=1152}
+:::
+:::
+
+::: {.cell}
+::: {.cell-output-display}
+![Prevalence of borrowing by source of loan and gender, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-borrprevbytype_gender-1.png){#fig-borrprevbytype_gender width=1152}
 :::
 :::
 

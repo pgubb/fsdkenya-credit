@@ -355,6 +355,61 @@ fig_bar_loans_by_size_and_source <- function(data, indicators, slicevar, groups,
 
   }
 
+fig_bar_loansize_by_lender <- function(data, indicators, slicevar, groups, plot_text, outfilename = FALSE) {
+  
+  combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
+  is <- combinations[[1]]
+  gs <- combinations[[2]]
+  
+  results <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data,
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_LOAN,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) 
+  
+  chart_df <- results %>% mutate(valuelabel =  as.character(prettyNum(round(median, 1), big.mark = ",")))
+  
+  p <- ggplot(
+    data = chart_df,
+    aes(
+      x = median,
+      y = fct_rev(fct_inorder(group_cat_val)), 
+      color = year_fct
+    )
+  ) +
+    geom_linerange(aes(xmin = 0, xmax = median), size = 1.75, position = position_dodge(width = 0.55)) +
+    geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white",  position = position_dodge(width = 0.55)) +
+    geom_text(aes(x = median + 2e3, label = valuelabel), hjust = 0, position = position_dodge2(width = 0.55, reverse = TRUE), color = "black") +
+    scale_color_manual(values = c("2019" = "black", "2021" = "#0496FF")) +
+    scale_x_continuous(limits = c(0, 1.6e5), breaks = c(5000, 25000, 50000, 75000, 100000, 125000, 150000), labels = scales::label_number(big.mark = ",")) + 
+    guides(color = guide_legend(title = NULL)) + 
+    labs(
+      y = plot_text[["yaxis"]],
+      x = plot_text[["xaxis"]],
+      title = str_wrap(plot_text[["title"]], 130),
+      subtitle = str_wrap(plot_text[["subtitle"]], 130),
+      caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
+    ) +
+    theme_custom(scale_f = 1.3) +
+    theme(legend.position = "top", legend.direction = "horizontal")
+  
+  if (outfilename) {
+    filename <- paste0("figures/", outfilename, "png")
+    ggsave(filename, plot = p, width = 14, height = 7, dpi = 300)
+  }
+  
+  return(p)
+  
+}
+
+
 #2. How prevalent are different forms of borrowing among adults? ---------------
 
 # Prevalence of borrowing by type
@@ -412,6 +467,110 @@ fig_bar_borrowers_by_type <- function(data, indicators, slicevar, groups, plot_t
 
   return(p)
 
+}
+
+fig_bar_borrowers_by_type_inc <- function(data, indicators, slicevar, groups, plot_text, outfilename = FALSE) {
+  
+  #indicators <- names(INDICATORS_REFLIST_LVL_BORR[str_detect(names(INDICATORS_REFLIST_LVL_BORR), paste(indicators, collapse = '|'))])
+  combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
+  is <- combinations[[1]]
+  gs <- combinations[[2]]
+  
+  m <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(resp_gender_fct == "Men"),
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_BORR,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(resp_gender_fct = "Men")
+  
+  w <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(resp_gender_fct == "Women"),
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_BORR,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(resp_gender_fct = "Women")
+  
+  results <- bind_rows(m, w)
+  
+  slicevar <- sym(slicevar)
+  
+  # Has recent loan
+  
+  p1 <- ggplot(
+    data = results %>% filter(!is.na(!!slicevar)) %>% filter(indicator == "has_recent_loan"),
+    aes(
+      y = mean,
+      x = !!slicevar,
+      color = resp_gender_fct, 
+      group = resp_gender_fct
+    )
+  ) +
+    facet_wrap(~fct_inorder(group_cat_val), nrow = 1) +
+    geom_line() + 
+    geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white") +
+    #geom_text(aes(x = mean, label = pctclean(mean, 0)), hjust = 0, position = position_dodge2(width = 0.35, reverse = TRUE), color = "black") +
+    guides(color = guide_legend(title = NULL)) +
+    labs(
+      x = plot_text[["xaxis"]],
+      y = plot_text[["yaxis"]],
+      title = str_wrap(plot_text[["title"]], TITLE_WRAP),
+      subtitle = str_wrap(plot_text[["subtitle"]], TITLE_WRAP),
+      caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
+    ) +
+    scale_color_manual(values = c("Men" = "#0496FF", "Women" = "#E36588")) +
+    scale_y_continuous(labels = scales::label_percent(), limits = c(0, 0.75)) +
+    theme_custom(scale_f = 1.3) +
+    theme(legend.position = "top", legend.direction = "horizontal")
+  
+  # Loan principal
+  
+  p2 <- ggplot(
+    data = results %>% filter(!is.na(!!slicevar)) %>% filter(indicator == "loan_principal_cd"),
+    aes(
+      y = mean,
+      x = !!slicevar,
+      color = resp_gender_fct, 
+      group = resp_gender_fct
+    )
+  ) +
+    facet_wrap(~fct_inorder(group_cat_val), nrow = 1, scales = "free_y") +
+    geom_line() + 
+    geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white") +
+    #geom_text(aes(x = mean, label = pctclean(mean, 0)), hjust = 0, position = position_dodge2(width = 0.35, reverse = TRUE), color = "black") +
+    guides(color = guide_legend(title = NULL)) +
+    labs(
+      x = plot_text[["xaxis"]],
+      y = plot_text[["yaxis"]],
+      title = str_wrap(plot_text[["title"]], TITLE_WRAP),
+      subtitle = str_wrap(plot_text[["subtitle"]], TITLE_WRAP),
+      caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
+    ) +
+    scale_color_manual(values = c("Men" = "#0496FF", "Women" = "#E36588")) +
+    scale_y_continuous(labels = scales::label_number(big.mark = ",")) +
+    theme_custom(scale_f = 1.3) +
+    theme(legend.position = "top", legend.direction = "horizontal")
+  
+  p <- p1 / p2 
+  
+  if (outfilename) {
+    filename <- paste0("figures/", outfilename, "png")
+    ggsave(filename, plot = p, width = 14, height = 7, dpi = 300)
+  }
+  
+  return(p)
+  
 }
 
 #
@@ -931,9 +1090,9 @@ fig_tile_debt_overview <- function(data, borrower_data, indicators, slicevar, gr
 fig_comp_debtstress <- function(data, slicevar, plot_text, outfilename = FALSE) {
 
   indicators <- c("debt_default_reason")
-  groups <- c("fullsample" = "All adults", "resp_income_quintile" = "Income quintile")
+  groups <- c("fullsample" = "All adults", "hh_wlth_group" = "Household wealth")
   indicators <- names(INDICATORS_REFLIST_LVL_BORR[str_detect(names(INDICATORS_REFLIST_LVL_BORR), paste(indicators, collapse = '|'))])
-  indicators <- c("debt_monthly_repayment_high", "debt_repaystress", "debt_default", "debt_delinquent", "debt_stressany", indicators)
+  indicators <- c("debt_monthly_repayment_high", "debt_repaystress_food", "debt_default", "debt_delinquent", indicators)
   combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
   is <- combinations[[1]]
   gs <- combinations[[2]]
@@ -957,7 +1116,7 @@ fig_comp_debtstress <- function(data, slicevar, plot_text, outfilename = FALSE) 
 
   chart_df <- results %>% filter(!is.na(group_cat_val)) %>%
     mutate(
-      indicator_category = ifelse(indicator %in% c("debt_monthly_repayment_high", "debt_repaystress","debt_default", "debt_delinquent",  "debt_stressany"),
+      indicator_category = ifelse(indicator %in% c("debt_monthly_repayment_high", "debt_repaystress_food", "debt_default", "debt_delinquent",  "debt_stressany"),
                                   "Prevalence of debt stress (% of adults)",
                                   "Main reason for default (2019) or delinquency (2021) (% of defaulted or delinquent borrowers)"),
       xcat = str_wrap(group_cat_val, 20),
@@ -965,7 +1124,7 @@ fig_comp_debtstress <- function(data, slicevar, plot_text, outfilename = FALSE) 
     group_by(!!slicevar, indicator) %>%
     mutate(
       xcat_num = row_number(),
-      group_label = ifelse(xcat_num == 6, indicator_name, NA),
+      group_label = ifelse(xcat_num == 4, indicator_name, NA),
       group_label = ifelse(mean < 0.03, NA, group_label)
     ) %>% ungroup() %>%
     filter(mean > 0) # Dropping "indicators"debt_delinquent" indicator which was not collected in 2019
@@ -992,12 +1151,12 @@ fig_comp_debtstress <- function(data, slicevar, plot_text, outfilename = FALSE) 
     geom_vline(xintercept = 1.5, color = "grey40", linetype = "dashed") +
     geom_text(aes(label = group_label), hjust = 0, nudge_x = 0.1, color = "black") +
     geom_text(aes(label = fullsample_label), nudge_y = 0.01,  vjust = 0, color = "black") +
-    scale_x_continuous(limits = c(0.5, 10.5), breaks = seq(1,6,1), labels = str_wrap(unique(chart_df$group_cat_val), 8)) +
+    scale_x_continuous(limits = c(0.5, 8.5), breaks = seq(1,4,1), labels = str_wrap(unique(chart_df$group_cat_val), 8)) +
     scale_y_continuous(limits = c(0, 0.4), labels = scales::label_percent()) +
     scale_color_viridis_d() +
     labs(
       y = NULL,
-      x = "Personal monthly income (quintiles)",
+      x = "Household wealth",
       title = plot_text[["title1"]],
       subtitle = unique(chart_df1$indicator_category),
       caption = str_wrap(caption, 120)
@@ -1039,12 +1198,12 @@ fig_comp_debtstress <- function(data, slicevar, plot_text, outfilename = FALSE) 
     geom_vline(xintercept = 1.5, color = "grey40", linetype = "dashed") +
     geom_text(aes(label = valuelabel, color = txt_color), position = position_stack(vjust = 0.5)) +
     geom_text(aes(x = xcat_num + 0.45, label = group_label), position = position_stack(vjust = 0.5), hjust = 0, color = "black") +
-    scale_x_continuous(limits = c(0.5, 10.5), breaks = seq(1,6,1), labels = str_wrap(unique(chart_df$group_cat_val), 8)) +
+    scale_x_continuous(limits = c(0.5, 8.5), breaks = seq(1,4,1), labels = str_wrap(unique(chart_df$group_cat_val), 8)) +
     scale_y_continuous(labels = scales::label_percent()) +
     scale_color_identity() +
     labs(
       y = NULL,
-      x = "Personal monthly income (quintiles)",
+      x = "Household wealth",
       title = plot_text[["title2"]],
       subtitle = unique(chart_df2$indicator_category),
       caption = str_wrap(caption, 120)

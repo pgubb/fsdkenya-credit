@@ -868,6 +868,8 @@ prep_borrower_data_2021 <- function(data) {
 
       debt_repaystress = ifelse(E2B1 == 1 | E2B3 == 1 | E2B4 == 1, 1, 0),
       debt_repaystress = ifelse(is.na(debt_repaystress), 0, debt_repaystress),
+      debt_repaystress_food = ifelse(E2B4 == 1, 1, 0),
+      debt_repaystress_food = ifelse(is.na(debt_repaystress_food), 0, debt_repaystress_food),
       debt_delinquent = ifelse(E2Ci__1 == 1 | E2Ci__2 == 1 | E2Ci__3 == 1 | E2Ci__4 == 1, 1, 0),
       debt_delinquent = ifelse(is.na(debt_delinquent), 0, debt_delinquent),
       debt_default = ifelse(E2Ci__1 == 1, 1, 0),
