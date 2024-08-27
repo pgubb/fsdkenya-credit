@@ -9,7 +9,8 @@ prep_borrower_data_2019 <- function(data) {
     mem_id = paste(hh_id, a_line, sep = "_"),
     psu = a8_1,
     probweights = Pop_Wt_r,
-    fullsample = "All adults"
+    fullsample = "All adults", 
+    totalpop = 1
 
   ) %>%
 
@@ -809,7 +810,7 @@ prep_borrower_data_2019 <- function(data) {
 
   # Creating analysis dataset -----------------------
 
-  statvars <- c("year", "fullsample", "hh_id", "mem_id", "psu", "probweights", "strata")
+  statvars <- c("year", "fullsample", "totalpop", "hh_id", "mem_id", "psu", "probweights", "strata")
   vars <- c(statvars, "goals_", "hh_", "resp_", "know_", "fin_", "shocks_", "_comp", "asset_", "rooms_", "borrower_", "lender_", "debt_")
   data <- data %>% select(matches(paste(vars, collapse = "|")))
 
@@ -878,7 +879,11 @@ prep_loans_data_2019 <- function(data, borrower_data) {
       #nloans_pastyear = ifelse(nloans_outstanding >0 & nloans_pastyear == 0, nloans_outstanding, nloans_pastyear),
       nloans_pastyear_mod = ifelse(!is.na(loan_principal) & nloans_pastyear == 0, 1, nloans_pastyear),
       nloans_pastyear_mod = ifelse(!is.na(nloans_outstanding) & nloans_pastyear_mod == 0, nloans_outstanding, nloans_pastyear_mod),
-
+      
+      # THere are loan types that are reported having been taken more than 100 times in the past year, setting a ceiling on these.
+      # likely value being reported is a monetery value
+      #nloans_pastyear_mod = ifelse(nloans_pastyear_mod > 100, 100, nloans_pastyear_mod),
+      
       x1 = ifelse(nloans_outstanding > 0 & nloans_pastyear == 0, 1, 0),
       x2 = ifelse(nloans_outstanding == 0 & nloans_pastyear == 0, 1, 0),
 
@@ -1070,9 +1075,12 @@ prep_loans_data_2019 <- function(data, borrower_data) {
   names(reasons) <- reasons_num
 
   # Reasons for taking loans: Aggregate
-  reasons_agg <- c(1, 2, 3, 4, 5, 6, 7)
-  names(reasons_agg) <- c("Basic consumption", "Education", "Business/farm investment", "Infrequent/large purchase", "Emergency", "Debt repayment", "Other")
-
+  reasons_agg <- c("Basic consumption", "Education", "Business/farm investment", "Infrequent/large purchase", "Emergency", "Debt repayment", "Other")
+  names(reasons_agg) <- c(1, 2, 3, 4, 5, 6, 7)
+  
+  reasons_agg2 <- c("Consumption", "Production")
+  names(reasons_agg) <- c(1, 2)
+  
   loans <- loans %>% mutate(
     loan_reason_agg = recode(loan_reason_det,
                              #Basic personal consumption
@@ -1082,7 +1090,7 @@ prep_loans_data_2019 <- function(data, borrower_data) {
                              #For current production (Farm/ business investment)
                              `4` = 3, `5` = 3, `6` = 3, `7` = 3, `9` = 3,
                              `18` = 3, `19` = 3, `20` = 3, `21` = 3, `22` = 3, `23` = 3,
-                             #For paying a larger/infrequent expense
+                             #For paying a larger/infrequent expense (house purchase, land purchase, improve a house, acquire household goods, social reasons, car or motorcyle, livestock, old age)
                              `8` = 4, `10` = 4, `11` = 4, `12` = 4, `14` = 4, `15` = 4, `16` = 4, `17` = 4, `26` = 4,
                              #For emergencies
                              `1` = 5,
@@ -1094,8 +1102,19 @@ prep_loans_data_2019 <- function(data, borrower_data) {
     loan_reason_det_str = reasons[loan_reason_det],
     loan_reason_agg = ifelse(loan_reason_agg %in% c(98, 99), NA, loan_reason_agg),
     loan_reason_agg_str = reasons_agg[loan_reason_agg],
+    
+    loan_reason_agg2 = recode(loan_reason_det,
+                             # Consumption smoothing (includes emergencies and paying back debt)
+                             `3` = 1, `13` = 1, `8` = 1, `10` = 1, `11` = 1, `12` = 1, `14` = 1, `15` = 1, `16` = 1, `17` = 1, `26` = 1,  `1` = 1,  `25` = 1, `24` = 1,
+                             #OTher
+                             `27` = 1, `28` = 1, `29`= 1,
+                             # For investment (education and current production)
+                             `2` = 2, `4` = 2, `5` = 2, `6` = 2, `7` = 2, `9` = 2, `18` = 2, `19` = 2, `20` = 2, `21` = 2, `22` = 2, `23` = 2
+    ),
+    loan_reason_agg2_str = reasons_agg2[loan_reason_agg2],
+    
     drop = ifelse(loan_principal < 100 & lender_agg1_str == "Digital", 1, 0)
-  ) %>% dummy_cols(select_columns = c("loan_reason_agg", "loan_reason_det"))
+  ) %>% dummy_cols(select_columns = c("loan_reason_agg", "loan_reason_agg2", "loan_reason_det"))
 
   loans <- loans %>%
     left_join(statvars, by = c("mem_id")) %>%

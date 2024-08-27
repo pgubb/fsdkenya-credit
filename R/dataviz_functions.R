@@ -184,6 +184,7 @@ fig_bar_loans_by_slice <- function(data, indicators, slicevar, groups, plot_text
   }
 
   chart_df <- results %>%
+    filter(!!slicevar != "Other") %>% 
     group_by(!!slicevar) %>%
     mutate(
       label_sig = formatC(signif(total/denom, digits=3), digits=3, format="fg", flag="#"),
@@ -220,7 +221,7 @@ fig_bar_loans_by_slice <- function(data, indicators, slicevar, groups, plot_text
   ggplot(
     data = chart_df,
     aes(
-      x = !!slicevar,
+      x = str_wrap(!!slicevar, 12),
       y = total,
       fill = group_cat_val
     )
@@ -469,6 +470,112 @@ fig_bar_borrowers_by_type <- function(data, indicators, slicevar, groups, plot_t
 
 }
 
+fig_bar_borrowers_by_type_inc_bd <- function(data, indicators, slicevar, groups, plot_text, outfilename = FALSE) {
+  
+  #indicators <- names(INDICATORS_REFLIST_LVL_BORR[str_detect(names(INDICATORS_REFLIST_LVL_BORR), paste(indicators, collapse = '|'))])
+  combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
+  is <- combinations[[1]]
+  gs <- combinations[[2]]
+  
+  r19 <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(year == 2019),
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_BORR,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(year_fct = "2019")
+  
+  r21 <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(year == 2021),
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_BORR,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(year_fct = "2021")
+  
+  results <- bind_rows(r19, r21)
+  
+  slicevar <- sym(slicevar)
+  
+  # Has recent loan
+  
+  p <- ggplot(
+    data = results %>% filter(!is.na(group_cat_val)),
+    aes(
+      y = mean,
+      x = str_wrap(group_cat_val, 10), 
+      color = year_fct, 
+      group = year_fct
+    )
+  ) +
+    facet_grid(cols = vars(str_wrap(indicator_name, 20)), rows = vars(!!slicevar), switch = "y") +
+    geom_line(linewidth = 1.2) + 
+    geom_point(shape = 21, size = 0.7, stroke = 0.7, color = "white", fill = "white") +
+    #geom_text(aes(x = mean, label = pctclean(mean, 0)), hjust = 0, position = position_dodge2(width = 0.35, reverse = TRUE), color = "black") +
+    guides(color = guide_legend(title = NULL)) +
+    labs(
+      x = plot_text[["xaxis"]],
+      y = plot_text[["yaxis"]],
+      title = str_wrap(plot_text[["title"]], TITLE_WRAP),
+      subtitle = str_wrap(plot_text[["subtitle"]], TITLE_WRAP),
+      caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
+    ) +
+    #scale_color_manual(values = c("Men" = "#0496FF", "Women" = "#E36588")) +
+    scale_color_manual(values = c("2019" = "#0496FF", "2021" = "#E36588")) +
+    scale_y_continuous(labels = scales::label_percent(), limits = c(0, 0.75)) +
+    theme_custom(scale_f = 1.3) +
+    theme(legend.position = "top", legend.direction = "horizontal")
+  
+  # Loan principal
+  
+  # p2 <- ggplot(
+  #   data = results %>% filter(!is.na(!!slicevar)) %>% filter(indicator == "loan_principal_cd"),
+  #   aes(
+  #     y = mean,
+  #     x = !!slicevar,
+  #     color = resp_gender_fct, 
+  #     group = resp_gender_fct
+  #   )
+  # ) +
+  #   facet_wrap(~fct_inorder(group_cat_val), nrow = 1, scales = "free_y") +
+  #   geom_line() + 
+  #   geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white") +
+  #   #geom_text(aes(x = mean, label = pctclean(mean, 0)), hjust = 0, position = position_dodge2(width = 0.35, reverse = TRUE), color = "black") +
+  #   guides(color = guide_legend(title = NULL)) +
+  #   labs(
+  #     x = plot_text[["xaxis"]],
+  #     y = plot_text[["yaxis"]],
+  #     title = str_wrap(plot_text[["title"]], TITLE_WRAP),
+  #     subtitle = str_wrap(plot_text[["subtitle"]], TITLE_WRAP),
+  #     caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
+  #   ) +
+  #   scale_color_manual(values = c("Men" = "#0496FF", "Women" = "#E36588")) +
+  #   scale_y_continuous(labels = scales::label_number(big.mark = ",")) +
+  #   theme_custom(scale_f = 1.3) +
+  #   theme(legend.position = "top", legend.direction = "horizontal")
+  
+  #p <- p1 / p2 
+  
+  if (outfilename) {
+    filename <- paste0("figures/", outfilename, "png")
+    ggsave(filename, plot = p, width = 14, height = 7, dpi = 300)
+  }
+  
+  return(p)
+  
+}
+
+
 fig_bar_borrowers_by_type_inc <- function(data, indicators, slicevar, groups, plot_text, outfilename = FALSE) {
   
   #indicators <- names(INDICATORS_REFLIST_LVL_BORR[str_detect(names(INDICATORS_REFLIST_LVL_BORR), paste(indicators, collapse = '|'))])
@@ -476,48 +583,76 @@ fig_bar_borrowers_by_type_inc <- function(data, indicators, slicevar, groups, pl
   is <- combinations[[1]]
   gs <- combinations[[2]]
   
-  m <- dplyr::bind_rows(
-    map2(is,
-         gs,
-         svy_summary_weights_v2,
-         data = data %>% filter(resp_gender_fct == "Men"),
-         g_l1 = slicevar,
-         iref = INDICATORS_REFLIST_LVL_BORR,
-         gref = groups,
-         psu = "psu",
-         strata = NULL,
-         w = "probweights")
-  ) %>% mutate(resp_gender_fct = "Men")
-  
-  w <- dplyr::bind_rows(
-    map2(is,
-         gs,
-         svy_summary_weights_v2,
-         data = data %>% filter(resp_gender_fct == "Women"),
-         g_l1 = slicevar,
-         iref = INDICATORS_REFLIST_LVL_BORR,
-         gref = groups,
-         psu = "psu",
-         strata = NULL,
-         w = "probweights")
-  ) %>% mutate(resp_gender_fct = "Women")
-  
-  results <- bind_rows(m, w)
-  
   slicevar <- sym(slicevar)
+  
+  data <- data %>% filter(!is.na(!!slicevar))
+  
+  m19 <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(year == 2019 & resp_gender_fct == "Men"),
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_BORR,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(resp_gender_fct = "Men", year_fct = "2019")
+  
+  w19 <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(year == 2019 & resp_gender_fct == "Women"),
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_BORR,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(resp_gender_fct = "Women", year_fct = "2019")
+  
+  m21 <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(year == 2021 & resp_gender_fct == "Men"),
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_BORR,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(resp_gender_fct = "Men", year_fct = "2021")
+  
+  w21 <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(year == 2021 & resp_gender_fct == "Women"),
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_BORR,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(resp_gender_fct = "Women", year_fct = "2021")
+  
+  results <- bind_rows(m19, m21, w19, w21)
   
   # Has recent loan
   
-  p1 <- ggplot(
-    data = results %>% filter(!is.na(!!slicevar)) %>% filter(indicator == "has_recent_loan"),
+  p <- ggplot(
+    data = results %>% filter(!is.na(!!slicevar)),
     aes(
       y = mean,
-      x = !!slicevar,
-      color = resp_gender_fct, 
-      group = resp_gender_fct
+      x = str_wrap(!!slicevar, 12), 
+      color = year_fct, 
+      group = year_fct
     )
   ) +
-    facet_wrap(~fct_inorder(group_cat_val), nrow = 1) +
+    facet_grid(rows = vars(resp_gender_fct), cols = vars(group_cat_val), switch = "y") +
     geom_line() + 
     geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white") +
     #geom_text(aes(x = mean, label = pctclean(mean, 0)), hjust = 0, position = position_dodge2(width = 0.35, reverse = TRUE), color = "black") +
@@ -529,40 +664,41 @@ fig_bar_borrowers_by_type_inc <- function(data, indicators, slicevar, groups, pl
       subtitle = str_wrap(plot_text[["subtitle"]], TITLE_WRAP),
       caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
     ) +
-    scale_color_manual(values = c("Men" = "#0496FF", "Women" = "#E36588")) +
-    scale_y_continuous(labels = scales::label_percent(), limits = c(0, 0.75)) +
+    #scale_color_manual(values = c("Men" = "#0496FF", "Women" = "#E36588")) +
+    scale_color_manual(values = c("2019" = "#0496FF", "2021" = "#E36588")) +
+    #scale_y_continuous(labels = scales::label_percent(), limits = c(0, 0.75)) +
     theme_custom(scale_f = 1.3) +
     theme(legend.position = "top", legend.direction = "horizontal")
   
   # Loan principal
   
-  p2 <- ggplot(
-    data = results %>% filter(!is.na(!!slicevar)) %>% filter(indicator == "loan_principal_cd"),
-    aes(
-      y = mean,
-      x = !!slicevar,
-      color = resp_gender_fct, 
-      group = resp_gender_fct
-    )
-  ) +
-    facet_wrap(~fct_inorder(group_cat_val), nrow = 1, scales = "free_y") +
-    geom_line() + 
-    geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white") +
-    #geom_text(aes(x = mean, label = pctclean(mean, 0)), hjust = 0, position = position_dodge2(width = 0.35, reverse = TRUE), color = "black") +
-    guides(color = guide_legend(title = NULL)) +
-    labs(
-      x = plot_text[["xaxis"]],
-      y = plot_text[["yaxis"]],
-      title = str_wrap(plot_text[["title"]], TITLE_WRAP),
-      subtitle = str_wrap(plot_text[["subtitle"]], TITLE_WRAP),
-      caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
-    ) +
-    scale_color_manual(values = c("Men" = "#0496FF", "Women" = "#E36588")) +
-    scale_y_continuous(labels = scales::label_number(big.mark = ",")) +
-    theme_custom(scale_f = 1.3) +
-    theme(legend.position = "top", legend.direction = "horizontal")
+  # p2 <- ggplot(
+  #   data = results %>% filter(!is.na(!!slicevar)) %>% filter(indicator == "loan_principal_cd"),
+  #   aes(
+  #     y = mean,
+  #     x = !!slicevar,
+  #     color = resp_gender_fct, 
+  #     group = resp_gender_fct
+  #   )
+  # ) +
+  #   facet_wrap(~fct_inorder(group_cat_val), nrow = 1, scales = "free_y") +
+  #   geom_line() + 
+  #   geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white") +
+  #   #geom_text(aes(x = mean, label = pctclean(mean, 0)), hjust = 0, position = position_dodge2(width = 0.35, reverse = TRUE), color = "black") +
+  #   guides(color = guide_legend(title = NULL)) +
+  #   labs(
+  #     x = plot_text[["xaxis"]],
+  #     y = plot_text[["yaxis"]],
+  #     title = str_wrap(plot_text[["title"]], TITLE_WRAP),
+  #     subtitle = str_wrap(plot_text[["subtitle"]], TITLE_WRAP),
+  #     caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
+  #   ) +
+  #   scale_color_manual(values = c("Men" = "#0496FF", "Women" = "#E36588")) +
+  #   scale_y_continuous(labels = scales::label_number(big.mark = ",")) +
+  #   theme_custom(scale_f = 1.3) +
+  #   theme(legend.position = "top", legend.direction = "horizontal")
   
-  p <- p1 / p2 
+  #p <- p1 / p2 
   
   if (outfilename) {
     filename <- paste0("figures/", outfilename, "png")

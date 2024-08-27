@@ -16,7 +16,8 @@ prep_borrower_data_2021 <- function(data) {
 
       hh_id = paste(ClusterNo, HHNo, sep = "_"),
       mem_id = paste(hh_id, A14vi, sep = "_"),
-      fullsample = "All adults"
+      fullsample = "All adults", 
+      totalpop = 1,
 
     ) %>%
 
@@ -1121,7 +1122,7 @@ prep_borrower_data_2021 <- function(data) {
 
   # Creating analysis dataset -----------------------
 
-  statvars <- c("hh_id", "mem_id", "fullsample", "psu", "probweights", "strata", "year")
+  statvars <- c("hh_id", "mem_id", "fullsample", "totalpop", "psu", "probweights", "strata", "year")
   vars <- c(statvars, "County", "goals_", "hh_", "resp_", "know_", "shocks_", "_comp", "asset_", "rooms_", "dwelling_", "fin_", "debt_", "fst_", "mimp_", "borrower_", "lender_")
   data <- data %>% select(matches(paste(vars, collapse = "|")))
 
@@ -1213,7 +1214,7 @@ prep_loans_data_2021 <- function(data, borrower_data) {
 
       # THere are loan types (primarily Fuliza) that are reported having been taken more than 100 times in the past year, setting a ceiling on these.
       # likely value being reported is a monetery value
-      nloans_pastyear_mod = ifelse(nloans_pastyear_mod > 100, 100, nloans_pastyear_mod),
+      #nloans_pastyear_mod = ifelse(nloans_pastyear_mod > 100, 100, nloans_pastyear_mod),
 
       loan_principal = ifelse(!is.na(loan_balance) & is.na(loan_principal), loan_balance, loan_principal),
 
@@ -1389,9 +1390,12 @@ prep_loans_data_2021 <- function(data, borrower_data) {
     ) %>% dummy_cols(select_columns = c("lender_agg0", "lender_agg1", "lender_agg2", "lender_agg3"))
 
   # Reasons for taking loans
-  reasons_agg <- c(1, 2, 3, 4, 5, 6, 7)
-  names(reasons_agg) <- c("Basic consumption", "Education", "Business/farm investment", "Infrequent/large purchase", "Emergency", "Debt repayment", "Other")
+  reasons_agg <- c("Basic consumption", "Education", "Business/farm investment", "Infrequent/large purchase", "Emergency", "Debt repayment", "Other")
+  names(reasons_agg) <- c(1, 2, 3, 4, 5, 6, 7)
 
+  reasons_agg2 <- c("Consumption", "Production")
+  names(reasons_agg) <- c(1, 2)
+  
   loans <- loans %>% mutate(
     loan_reason_agg = case_match(as.numeric(loan_reason_det),
                                  #Basic personal consumption
@@ -1430,8 +1434,17 @@ prep_loans_data_2021 <- function(data, borrower_data) {
                                  28 ~ 7
     ),
     loan_reason_agg = ifelse(loan_reason_agg %in% c(999999999, 98, 99), NA, loan_reason_agg),
-    loan_reason_agg_str = reasons_agg[loan_reason_agg]
-  ) %>% dummy_cols(select_columns = c("loan_reason_agg", "loan_reason_det")) %>%
+    loan_reason_agg_str = reasons_agg[loan_reason_agg], 
+    
+    
+    loan_reason_agg2 = case_match(
+      loan_reason_agg, 
+      1 ~ 1, 4 ~ 1, 5 ~ 1, 6 ~ 1, 7 ~ 1, 
+      2 ~ 2, 3 ~ 2
+    ),
+    loan_reason_agg2_str = reasons_agg2[loan_reason_agg2],
+    
+  ) %>% dummy_cols(select_columns = c("loan_reason_agg", "loan_reason_agg2", "loan_reason_det")) %>%
     mutate(
       loan_reason_det_23 = 0
     )

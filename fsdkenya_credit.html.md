@@ -13,7 +13,94 @@
 
 ## Introduction
 
-The objective of this brief is to use nationally representative survey data to describe the market for credit in Kenya. How many adults use loans? Where do they borrow from? How much and why do they borrow? 
+The objective of this brief is to use the FinAccess nationally representative survey data to describe the market for credit in Kenya and it dynamics over the COVID-19 pandemic period. How many adults use loans? Where do they borrow from? How much and why do they borrow? It is important to note the strengths and limitations of survey data in describing the market for loans.  Comparisons of the volume and value of loans disbursed by providers from FinAccess with data collected and published by financial service providers or regulators in annual reports or financial statements will not necessarily align. There are several reasons that measures of loan disbursements by volume or value can be misaligned between demand-side data (like FinAccess) and supply-side sources. A few reasons are outlined below and an illustrative example comparing the demand- and supply-side estimates of the value of annual loan disbursements from M-Shwari and Fuliza is provided thereafter. 
+
+* **Universe of inference**: Given that FinAccess is a household survey that captures the adoption and use of financial services at the level of individuals, it will not capture the borrowing behavior of large formal firms or other institutional entities and may only partially capture the borrowing behavior of smaller, domestic, firms and owner-operated businesses whose owners would be included in the survey. 
+* **Survey sampling bias**: While the FinAccess survey is designed to be nationally representative using the latest (2019) Census list of households as a sampling frame, surveys do tend to under-represent individuals at the extreme upper-end of the income distribution. To the extent that borrowing from certain types of providers (e.g. banks) or credit instruments (e.g. mortgages) is concentrated at the upper-end of the income distribution, a survey like FinAccess may under-count the number of borrowers of services that adopted more widely or intensively by wealthier households.  
+* **Survey measurement error**: In addition to statistical sampling error which arises due to the the variation in estimates of a population parameter from samples, responses to questions in surveys can also be subject to biases. For example, to measure borrowing activity, FinAccess asks respondents to recall whether they have taken a loan from a particular provider, how much was borrowed and how many loans were taken, over a period of time. The details of a large personal bank loan or mortgage taken one or two months ago are easier to remember than the total number of purchases made on a credit card or the number of times someone has borrowed from a shopkeeper over the past year.
+* **Reference-period**: The reference period for measures of the credit market obtained from the FinAccess survey correspond to the 12-month period prior to the date of data collection. For example, for the 2021 FinAccess survey the reference period over which borrowing activity is measured is June-September 2020 through June-September 2021. Data supplied in annual reports from providers is usually aligned with their fiscal year. 
+
+Measures of the market for credit from FinAccess are not a substitute for measures obtained from supply-side sources. However, they are complementary and offer a view of the market that supply side data sources cannot provide. For example, published publicly available supply-side figures rarely disaggregate indicators across key socio-economic and demographic characteristics, such as gender, income, geographic location and age. Demand-side data provides a comprehensive view of borrowing behavior that spans use of loans from both formal and informal sources of credit. In addition surveys provide data that can better help contextualize the demand for lending, such as the reasons individuals are borrowing and whether borrowers are having difficulty repaying. 
+
+The author highlights the limitations of survey data in the context of understanding the composition and dynamics of credit markets in Kenya to remind readers that for many questions, any single source or piece of data offers only partial or incomplete answers and encourages readers to build a portfolio of evidence that includes data published from administrative sources. 
+
+### Fuliza and M-Shwari
+This report uses several questions from FinAccess to estimate the annual market for loans by volume and value for a range of credit providers. The figure below shows FinAccess estimates for the total value of Fuliza and M-Shwari annual loan disbursements alongside those reported by Safaricom in its annual sustainability report. There is a very large difference in the value of yearly borrowing from Fuliza: FinAccess measured a total of KSh 53 billion in loans disbursed between September 2020 through September 2021. By March 30th, 2021 Safaricom reported KSh 351 billion in loans, over 6 times the value reported in FinAccess. The differences are much smaller with M-Shwari.
+
+
+::: {.cell}
+::: {.cell-output-display}
+![Digital credit market value indicators: Supply vs. Demand-side measurements](fsdkenya_credit_files/figure-html/fig-fuliza_favsaf-1.png){#fig-fuliza_favsaf width=1152}
+:::
+:::
+
+
+What might account for this difference? Estimates of the value of loans disbursed on an annual basis from FinAccess (for borrowers of a specific type of loan) can be decomposed as follows: 
+
+$$\sum_{n=1}^{B} N_{loanspastyear} * P_{recentloan} $$ 
+
+where $B=$ Total number of borrowers,  $N_{loanspastyear}=$ Total number of loans taken in the past year, $P_{recentloan}=$ Amount borrowed (for most recent loan)$. In computing the total value of borrowing for a specific borrower, the value of the borrower's most recent loan is assumed to apply for all previous loans taken in the year. For Fuliza, the values of these parameters derived from FinAccess and Safaricom (where available) are provided in the table below. One reason that the total value of Fuliza disbursements is substantially lower in FinAccess is that the survey captured an estimated around 1 million fewer unique Fuliza borrowers than what Safaricom reported. However, the main reason FinAccess underestimates the total value of annual loans disbursed (compared to supply-side figures) is that it measures a much lower intensity of loan-taking per borrower than implied by Safaricom's own numbers. 
+
+
+::: {.cell}
+::: {#fig-fuliza_favsaf_table .cell-output-display}
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Source </td>
+   <td style="text-align:left;"> FinAccess </td>
+   <td style="text-align:left;"> Safaricom </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Year </td>
+   <td style="text-align:left;"> Sep 2020 - Sep 2021 </td>
+   <td style="text-align:left;"> April 2020 - March 2021 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Percent of adult (18+) population using Fuliza </td>
+   <td style="text-align:left;"> 18.3% </td>
+   <td style="text-align:left;"> - </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Adult (18+) population represented by FinAccess (millions) </td>
+   <td style="text-align:left;"> 27.29 </td>
+   <td style="text-align:left;"> - </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Unique borrowers (18+, millions) </td>
+   <td style="text-align:left;"> 4.99 </td>
+   <td style="text-align:left;"> 5.9 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Number of transactions (millions) </td>
+   <td style="text-align:left;"> 52.8 </td>
+   <td style="text-align:left;"> 787.1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Average number of loans taken per borrower </td>
+   <td style="text-align:left;"> 9.3 </td>
+   <td style="text-align:left;"> 123 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Average size of loan </td>
+   <td style="text-align:left;"> KSh 1,078 </td>
+   <td style="text-align:left;"> KSh 446 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Median size of loan </td>
+   <td style="text-align:left;"> KSh 500 </td>
+   <td style="text-align:left;"> - </td>
+  </tr>
+</tbody>
+</table>
+
+
+
+Fuliza loan adoption and usage indicators: FinAccess estimates v Safaricom published figures
+:::
+:::
+
+
 
 ## 1. How large is the market for loans in Kenya? 
 
@@ -40,6 +127,11 @@ Between 2019 and 2021, the total volume of loans disbursed in Kenya decreased by
 @fig-marketbyvolbywealthyear breaks the total volume of loans disbursed by both the source of the loan and the borrower's household wealth ^[Household wealth is proxied using data on the quality of housing conditions and household ownership of physical assets]. Between 2019 and 2021, while the total volume of loans used by borrowers in the middle 40% and upper 20% of the household wealth distribution remained steady, the volume of loans used by borrowers in the poorest 40% of the distribution fell by 30% (from 22.4 million to 16.1 million loans). The drop is a result of significantly lower disbursements to poorer borrowers from digital lending services. 
 
 
+::: {.cell}
+::: {.cell-output-display}
+![The market for loans by volume and borrower's household wealth, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-marketbyvolbygenderyear-1.png){#fig-marketbyvolbygenderyear width=1152}
+:::
+:::
 
 ::: {.cell}
 ::: {.cell-output-display}
@@ -74,6 +166,12 @@ Compared to 2019, the total value of loans disbursed in 2021 fell by 30% (from K
 
 ::: {.cell}
 ::: {.cell-output-display}
+![The market for loans by volume, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-marketbyvalbygenderyear-1.png){#fig-marketbyvalbygenderyear width=1152}
+:::
+:::
+
+::: {.cell}
+::: {.cell-output-display}
 ![The market for loans by volume, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-marketbyvalbywealthyear-1.png){#fig-marketbyvalbywealthyear width=1152}
 :::
 :::
@@ -101,6 +199,18 @@ Compared to 2019, the total value of loans disbursed in 2021 fell by 30% (from K
 ::: {.cell}
 ::: {.cell-output-display}
 ![Median loan principal by lender, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-loanprincipalbylender-1.png){#fig-loanprincipalbylender width=1152}
+:::
+:::
+
+::: {.cell}
+::: {.cell-output-display}
+![The market for loans by volume, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-marketbyvolbyreasonyear-1.png){#fig-marketbyvolbyreasonyear width=1152}
+:::
+:::
+
+::: {.cell}
+::: {.cell-output-display}
+![The market for loans by volume, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-marketbyvalbyreasonyear-1.png){#fig-marketbyvalbyreasonyear width=1152}
 :::
 :::
 
@@ -163,6 +273,13 @@ In both 2019 and 2021, the primary reason for borrowing in Kenya was for basic c
 ![Borrowers by main reason for taking loans by household wealth, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-reasonsforborrowing-1.png){#fig-reasonsforborrowing width=1152}
 :::
 :::
+
+::: {.cell}
+::: {.cell-output-display}
+![Borrowers by main reason for taking loans by household wealth, 2019 and 2021](fsdkenya_credit_files/figure-html/fig-reasonsforborrowing_bygender-1.png){#fig-reasonsforborrowing_bygender width=1152}
+:::
+:::
+
 
 
 In 2021, borrowers in Kenya cited convenience and ease of obtaining a loan as the primary reasons for considering a lender their most important. Fuliza had the highest percentage of borrowers (60%) valuing convenience, followed by mobile banks (50%) and fintech apps (42%) (@fig-valuedfeatures). Affordability, in terms of low fees and repayments, was another significant factor, especially for SACCOs/MFIs (25%). Ease of use and the ability to make repayments were particularly important for borrowers from informal sources such as social networks (37%), shopkeepers (23%) and employers or buyers (32%), which likely appreciate the flexibility these lenders can afford. Features suited to individual needs, including privacy, were a key consideration for borrowers using fintech apps (34%) and personal or business loans from bank (31%). Trust is rarely cited as a reason people value a lender, with the highest being employer or buyer loans (12%). Overall, the data highlights that while convenience remains the predominant factor in lender importance, affordability and ease of repayments also play crucial roles in shaping borrower preferences.

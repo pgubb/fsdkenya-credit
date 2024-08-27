@@ -13,7 +13,7 @@ PROJDIR <- getwd()
 CAPTION <- "Source: 2021 FinAccess household survey (Nationally representative sample of 20,909  adults ages 18 and above)."
 
 INDICATORS_REFLIST_LVL_BORR <- c(
-
+  "total" = "Population", 
   "borrower_any_status" = "Currently borrows from any source",
   "borrower_credit_demand" =  "Currently borrows or attempted to borrow in past year from any source",
   "borrower_formalfi_status" = "Currently borrows from bank or non-bank financial institution (SACCO/MFI/Insurance)",
@@ -167,7 +167,7 @@ INDICATORS_REFLIST_LVL_BORR <- c(
 
 INDICATORS_REFLIST_LVL_LOAN <- c(
   "resp_income" = "Personal monthly income",
-  "nloans_pastyear" = "Number of loans taken in past year",
+  "nloans_pastyear_mod" = "Number of loans taken in past year",
   "nloans_outstanding" = "Number of loans outstanding",
   "loan_principal" = "Loan size (Ksh)",
   "loan_principal_income" = "Loan principal as a share of borrower income (%)",

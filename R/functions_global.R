@@ -127,12 +127,13 @@ prep_respdebt_data <- function(borrower_data, loans_data, lendervar) {
   lendervar <- sym(lendervar)
 
   alladults <- borrower_data %>% select(mem_id) 
-  characteristics <- borrower_data %>% select(year, year_fct, mem_id, psu, probweights, hh_urbrur, resp_gender_fct, resp_income_w_pred, resp_income_quintile)
+  characteristics <- borrower_data %>% select(year, year_fct, mem_id, psu, probweights, hh_urbrur, hh_wlth_group, resp_gender_fct, resp_income_w_pred, resp_income_quintile)
 
   balances <- loans_data %>%
-    select(mem_id, !!lendervar, loan_principal, loan_balance) %>%
+    select(mem_id, !!lendervar, nloans_pastyear, loan_principal, loan_balance) %>%
     group_by(mem_id, !!lendervar) %>%
     summarize(
+      nloans_pastyear = sum(nloans_pastyear, na.rm = TRUE),
       loan_principal = sum(loan_principal, na.rm = TRUE),
       debt_balance = sum(loan_balance, na.rm = TRUE)
     ) %>% ungroup()
@@ -141,6 +142,7 @@ prep_respdebt_data <- function(borrower_data, loans_data, lendervar) {
     complete(mem_id, !!lendervar) %>%
     filter(!is.na(!!lendervar)) %>% 
     mutate(
+      nloans_pastyear = ifelse(is.na(nloans_pastyear), 0, nloans_pastyear),
       loan_principal = ifelse(is.na(loan_principal), 0, loan_principal),
       debt_balance = ifelse(is.na(debt_balance), 0, debt_balance),
     )
@@ -148,6 +150,7 @@ prep_respdebt_data <- function(borrower_data, loans_data, lendervar) {
   debt_all_sources <- debt_by_source %>%
     group_by(mem_id) %>%
     summarize(
+      nloans_past_year = sum(nloans_pastyear), 
       loan_principal = sum(loan_principal),
       debt_balance = sum(debt_balance)) %>%
     mutate(!!lendervar := "All sources")
@@ -157,11 +160,13 @@ prep_respdebt_data <- function(borrower_data, loans_data, lendervar) {
     left_join(characteristics, by = c("mem_id")) %>%
     mutate(
       fullsample = "All adults",
+      nloans_pastyear = ifelse(is.na(nloans_pastyear), 0, nloans_pastyear),
       has_recent_loan = ifelse(loan_principal > 0, 1, 0),
       has_debt = ifelse(debt_balance > 0, 1, 0),
       debt_balance_income = debt_balance/ifelse(resp_income_w_pred == 0, 1, resp_income_w_pred),
       debt_high = ifelse(debt_balance_income > 0.5, 1, 0),
       # Conditional on having debt
+      nloans_pastyear_cd = ifelse(has_recent_loan == 0, NA, nloans_pastyear), 
       loan_principal_cd = ifelse(has_recent_loan == 0, NA, loan_principal),
       debt_balance_cd = ifelse(has_debt == 0, NA, debt_balance),
       debt_balance_income_cd = ifelse(has_debt == 0, NA, debt_balance_income),

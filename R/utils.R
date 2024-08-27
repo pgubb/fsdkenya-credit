@@ -570,3 +570,38 @@ runModel <- function(data, indepvar, cause, confounders, gender, year) {
            null_error_rate = error.rate.null
     )
 }
+
+
+loans_by_slice <- function(data, indicators, slicevar, groups) {
+  
+  lendervar <- sym(names(groups))
+  slicevar <- sym(slicevar)
+  
+  data <- data %>%
+    group_by(!!slicevar, mem_id, !!lendervar) %>%
+    mutate(ind_nloans_pastyear_bylender = sum(nloans_pastyear_mod, na.rm = T),
+           ind_totalborrowed_pastyear_bylender = sum(total_borrowed, na.rm = T)
+    ) %>%
+    filter(row_number() == 1) %>%
+    ungroup()
+  
+  combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
+  is <- combinations[[1]]
+  gs <- combinations[[2]]
+  
+  results <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data,
+         g_l1 = as_string(slicevar),
+         iref = INDICATORS_REFLIST_LVL_LOAN,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  )
+  
+  return(results)
+  
+}
