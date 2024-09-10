@@ -799,7 +799,8 @@ prep_borrower_data_2019 <- function(data) {
         e2e %in% c(2) ~ 2, # Interest rates / repayment rates went up
         e2e %in% c(3,9) ~ 3, # Did not understand terms, payment more than expected
         e2e %in% c(4, 7, 8) ~ 4, # Poor business performance, lost income source
-        e2e %in% c(5, 6) ~ e2e,
+        e2e %in% c(5) ~ 5,
+        e2e %in% c(6) ~ 6,
         e2e %in% c(10) ~ 7, # Unexpected emergency
         e2e %in% c(11, 12, 14, 15) ~ 8, # Other
         e2e %in% c(98, 99) ~ NA,
@@ -873,12 +874,19 @@ prep_loans_data_2019 <- function(data, borrower_data) {
 
   loans <- loans %>%
     filter_at(vars(contains("loan")), any_vars(!is.na(.)))
-
+  
+  social <- loans %>% filter(lender %in% c("f", "i", "j")) %>% mutate(nloans_pastyear > 100, 100, nloans_pastyear)
+  imputed_value = median(social$nloans_pastyear, na.rm = TRUE)
+  
   loans <- loans %>%
     mutate(
       #nloans_pastyear = ifelse(nloans_outstanding >0 & nloans_pastyear == 0, nloans_outstanding, nloans_pastyear),
       nloans_pastyear_mod = ifelse(!is.na(loan_principal) & nloans_pastyear == 0, 1, nloans_pastyear),
-      nloans_pastyear_mod = ifelse(!is.na(nloans_outstanding) & nloans_pastyear_mod == 0, nloans_outstanding, nloans_pastyear_mod),
+      nloans_pastyear_mod = ifelse(!is.na(nloans_outstanding) & (nloans_pastyear_mod == 0 | is.na(nloans_pastyear_mod)), nloans_outstanding, nloans_pastyear_mod),
+      # Imputing shopkeeper goods on credit loans frequency in the past year to be the median of all informal sources (Social networks, Chama, and cash loans): 
+      nloans_pastyear_mod = ifelse(is.na(nloans_pastyear_mod) & lender ==  "k", imputed_value, nloans_pastyear_mod), 
+      nloans_pastyear_mod = ifelse(is.na(nloans_pastyear_mod) & !is.na(loan_principal), 1, nloans_pastyear_mod),
+      
       
       # THere are loan types that are reported having been taken more than 100 times in the past year, setting a ceiling on these.
       # likely value being reported is a monetery value
@@ -903,7 +911,7 @@ prep_loans_data_2019 <- function(data, borrower_data) {
 
       # This is an estimate and assumes previous loans were of the same value
       total_borrowed = nloans_pastyear_mod*loan_principal
-
+      
     ) %>%
     filter_at(vars(contains("loan")), any_vars(!is.na(.))) %>%
     dummy_cols(select_columns = c("loan_principal_cat"))

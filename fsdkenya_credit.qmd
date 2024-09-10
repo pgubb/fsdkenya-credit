@@ -17,54 +17,58 @@ source("R/dataviz_functions.R")
 ###########
 
 ### 2021 ###
-raw_data <- get_raw_data_fromfile(2021, "Anonymized Weighted FinAccess 2021.sav") # Importing FinAccess dataset (2021)
+raw_data <- get_raw_data_fromfile(2021, "Anonymized Weighted FinAccess 2021.sav", AGECUTOFF) # Importing FinAccess dataset (2021)
 varbook <- gen_varbook_vec(raw_data) # Creating a named vector with all variable names and labels 
 modglobal_indicator_reflist(raw_data) # Modifying the gloabl INDICATORS_REFLIST_LVL_LOAN
 # Creating analysis datasets: 
 borrower_data <- prep_borrower_data(raw_data) # 1 row per adult:
 loans_data <- prep_loans_data(raw_data, borrower_data) # 1 row per loan
 respdebt_data <- prep_respdebt_data(borrower_data, loans_data, "lender_agg3_str") # 1 row per adult-lender aggregate
+respdebt_data_agg1 <- prep_respdebt_data(borrower_data, loans_data, "lender_agg1_str") # 1 row per adult-lender aggregate
 
 ### 2019 ###
-raw_data_2019 <- get_raw_data_fromfile(2019, "FinAccess2018_new.sav")
+raw_data_2019 <- get_raw_data_fromfile(2019, "FinAccess2018_new.sav", AGECUTOFF)
 varbook_2019 <- gen_varbook_vec(raw_data_2019)
 # Creating analysis datasets: 
 borrower_data_2019 <- prep_borrower_data(raw_data_2019)
 loans_data_2019 <- prep_loans_data(raw_data_2019, borrower_data_2019)
 respdebt_data_2019 <- prep_respdebt_data(borrower_data_2019, loans_data_2019, "lender_agg3_str")
+respdebt_data_agg1_2019 <- prep_respdebt_data(borrower_data_2019, loans_data_2019, "lender_agg1_str") # 1 row per adult-lender aggregate
 
 # Data pools combining all years
 borrower_data_pool <- bind_rows(borrower_data, borrower_data_2019)
-loans_data_pool <- bind_rows(loans_data, loans_data_2019)
+loans_data_pool <- bind_rows(loans_data, loans_data_2019)  %>% mutate(fullsample = "All sources")
 respdebt_data_pool <- bind_rows(respdebt_data, respdebt_data_2019)
-
+respdebt_data_pool_agg1 <- bind_rows(respdebt_data_agg1, respdebt_data_agg1_2019) 
 ```
 
 
 ## Summary 
 
-**Credit conditions during COVID-19 tightened substantially**. The market for credit experienced a sharp contraction in 2021 in concert with the economic slowdown resulting from the direct and indirect impacts of COVID-19. Despite an increase in the number of adults needing credit, the supply of credit fell. Between 2019 and 2021, the share of adults who had either attempted to borrow or were currently borrowing in the past year rose from 52 to 56%. However, over this period the total *number* of loans disbursed across all lenders declined by 10% and the total *value* of loans disbursed fell by 30%. Bank lending in particular pulled back significantly. Total bank lending to adults fell by 50% (KSh 350 billion), and this was almost entirely a reduction in lending to business owners. Lending to employed adults remained steady at KSh 258 billion in both 2019 and 2021. Other formal financial institutions also reduced lending during this period, but to a lesser degree. While total disbursements from Saccos and MFIs declined by 25 percent, their importance to business owners grew in relative terms: In 2019, the ratio of bank to Sacco/MFI loan disbursements to business owners was 7 to 1 by 2021 the ratio was 1 to 1. With more adults in need of credit and formal institutions less likely to provide financing, more borrowers (especially those among the poorest 40% and richest 20% of households) leaned on social networks to meet liquidity needs. Loans from friends, family members or neighbors rose by Ksh 33 billion (from Ksh 80 to 113 billion) between 2019 and 2021. 
+**Credit conditions during COVID-19 tightened substantially**. From a value perspective, the market for credit experienced a sharp contraction in 2021 in concert with the economic slowdown resulting from the direct and indirect impacts of COVID-19. Despite an increase in the number of adults needing credit, total loan disbursements fell. Between 2019 and 2021, the share of adults who had either attempted to borrow or were currently borrowing in the past year rose from 52 to 56%. However, over this period the total *value* of loans disbursed from all lenders fell by 30%. Bank lending in particular pulled back significantly. Total bank lending to adults fell by 50% (KSh 346 billion), and this was almost entirely a reduction in lending to business owners. Lending to employed adults remained steady at around KSh 260 billion in both 2019 and 2021. Other formal financial institutions also reduced lending during this period, but to a lesser degree. While total disbursements from Saccos and MFIs declined by 25 percent, their importance to business owners grew in relative terms: In 2019, the ratio of bank to Sacco/MFI loan disbursements to business owners was 7 to 1 by 2021 the ratio was 1 to 1. With more adults in need of credit and formal institutions less likely to provide financing, more borrowers (especially those among the poorest 40% and richest 20% of households) leaned on social networks to meet liquidity needs. Loans from friends, family members or neighbors rose by Ksh 31 billion (from Ksh 86 to 117 billion) between 2019 and 2021. 
 
-**Digital lending options continue to expand and uncover massive demand for short-term liquidity**. In 2021, two-thirds of the close to 80 million cash loans disbursed to Kenyan adults were mediated through digital technologies, 30% were mediated through informal or relational agreements and 5% were mediated through traditional loan contracts at a financial institution. Fuliza alone accounted for 54% of all loans disbursed in 2021, reflecting rapid adoption of the service which was launched in early 2019. In 2021, Fuliza was used by nearly 1 in 5 adults who typically borrowed Ksh 500, 7 times a year. The data suggest that Fuliza partially displaced the practice of taking goods on credit from shopkeepers (informal buy now pay later), as well as other digital lending options such as loans from mobile banking services and fintech apps. For example, the share of low-value credit (under KSh 2,500) from shopkeepers fell from 34 to 23 percent just as the share of digital loans (including Fuliza) rose from 12 to 24 percent between 2019 and 2021. 
+**Digital lending options continue to expand and uncover massive demand for short-term liquidity**. In 2021, nearly 60 percent of the loans disbursed to Kenyan adults were mediated through digital technologies, 37% were mediated through informal or relational agreements and less than 5% were mediated through traditional loan contracts at a financial institution. Fuliza alone accounted for 50% of all loans disbursed in 2021, reflecting rapid adoption of the service which was launched in early 2019. In 2021, Fuliza was used by nearly 1 in 5 adults who typically borrowed Ksh 500, 9 times a year. The data suggest that Fuliza partially displaced the practice of taking goods on credit from shopkeepers (informal buy now pay later), as well as other digital lending options such as loans from mobile banking services and fintech apps. For example, the share of low-value credit (under KSh 2,500) from shopkeepers fell from 34 to 23 percent just as the share of digital loans (including Fuliza) rose from 12 to 24 percent between 2019 and 2021. 
 
 **A rising share of adults are indebted and a significant share show signs of debt stress**. Between 2019 and 2021, the share of adults with some outstanding debt increased by 22 percent, such that in 2021 nearly 50 percent of adults were carrying debt. Over this period, the share of adults reporting that they had to reduce food spending to repay a loan rose from 18 to 22%, with the largest increase among adults in the richest 20% of households (the share reporting having to cut food expenses to repay a loan rose from 15 to 25% from 2019 to 2021). 
 
 
 ## Introduction
 
-The objective of this brief is to use the FinAccess nationally representative survey data to describe the market for credit in Kenya and it dynamics over the COVID-19 pandemic period. How many adults use loans? Where do they borrow from? How much and why do they borrow? It is important to note the strengths and limitations of survey data in describing the market for loans.  Comparisons of the volume and value of loans disbursed by providers from FinAccess with data collected and published by financial service providers or regulators in annual reports or financial statements will not necessarily align. There are several reasons that measures of loan disbursements by volume or value can be misaligned between demand-side data (like FinAccess) and supply-side sources. A few reasons are outlined below and an illustrative example comparing the demand- and supply-side estimates of the value of annual loan disbursements from M-Shwari and Fuliza is provided thereafter. 
+The objective of this brief is to use the [FinAccess](https://finaccess.knbs.or.ke) nationally representative survey data to describe the composition and dynamics of borrowing in Kenya over the COVID-19 pandemic period. How many adults were borrowing? Where did they borrow from? How much and why did they borrow? 
+
+It is important to note that this brief brings a 'demand-side' perspective, meaning that the data this report uses to explore the credit market is collected from self-reported responses to questions administered in a survey that is designed to be representative of Kenya's population. Like any source of data, survey data has particular strengths and limitations and the author highlights these upfront to remind readers that for many questions, any single source or piece of data offers only partial or incomplete answers and encourages readers to build a portfolio of evidence for understanding credit in Kenya that includes data from administrative sources and other studies. 
+
+One objective of the analyses herein is to estimate the size of the market for credit among households. However, estimates of the volume and value of loans disbursed by financial service providers from FinAccess compared to figures published by financial service providers, regulators or supervisors in annual reports or financial statements will not necessarily align with these estimates. There are several reasons that measures of loan disbursements by volume or value can be misaligned between demand- supply-side sources. A few reasons are outlined below and an illustrative example comparing the demand- and supply-side estimates of the value of annual loan disbursements from M-Shwari, Fuliza and Commercial Banks is provided thereafter. 
 
 * **Universe of inference**: Given that FinAccess is a household survey that captures the adoption and use of financial services at the level of individuals, it will not capture the borrowing behavior of large formal firms or other institutional entities and may only partially capture the borrowing behavior of smaller, domestic, firms and owner-operated businesses whose owners would be included in the survey. 
-* **Survey sampling bias**: While the FinAccess survey is designed to be nationally representative using the latest (2019) Census list of households as a sampling frame, surveys do tend to under-represent individuals at the extreme upper-end of the income distribution. To the extent that borrowing from certain types of providers (e.g. banks) or credit instruments (e.g. mortgages) is concentrated at the upper-end of the income distribution, a survey like FinAccess may under-count the number of borrowers of services that adopted more widely or intensively by wealthier households.  
-* **Survey measurement error**: In addition to statistical sampling error which arises due to the the variation in estimates of a population parameter from samples, responses to questions in surveys can also be subject to biases. For example, to measure borrowing activity, FinAccess asks respondents to recall whether they have taken a loan from a particular provider, how much was borrowed and how many loans were taken, over a period of time. The details of a large personal bank loan or mortgage taken one or two months ago are easier to remember than the total number of purchases made on a credit card or the number of times someone has borrowed from a shopkeeper over the past year.
-* **Reference-period**: The reference period for measures of the credit market obtained from the FinAccess survey correspond to the 12-month period prior to the date of data collection. For example, for the 2021 FinAccess survey the reference period over which borrowing activity is measured is June-September 2020 through June-September 2021. Data supplied in annual reports from providers is usually aligned with their fiscal year. 
+* **Survey sampling bias**: While the FinAccess survey is designed to be nationally representative using the latest (2019) Census list of households as a sampling frame, surveys are known to miss individuals at the extreme upper-end of the income distribution, a problem which has been referred to as the "Missing rich" ^[See for example Lustig, Nora (2019) "The Missing Rich in household surveys: Causes and Correction Approaches" CEQ Working paper 75.] . To the extent that borrowing from certain types of providers (e.g. banks) or credit instruments (e.g. mortgages) is concentrated at the upper-tail of the income distribution, a survey like FinAccess may under-count the absolute number of borrowers of services that are adopted more widely or intensively by members of the wealthiest households.  
+* **Survey measurement error**: In addition to statistical sampling error which arises due to  the variation in estimates of a population parameter from repeated samples, responses to questions in surveys can also be prone to errors. For example, to measure borrowing activity, FinAccess asks respondents to recall whether they have taken a loan from a particular provider, how much was borrowed in the most recent case and how many loans were taken in total from that provider over the past year. The details of a large personal bank loan or mortgage taken one or two months ago are easier to remember then the details and total number of smaller loans taken from a digital lender or shopkeeper over the past year.
+* **Reference-period**: The reference period for measures of the credit market obtained from the FinAccess survey correspond to the 12-month period prior to the date of data collection. For example, for the 2021 FinAccess survey the reference period over which borrowing activity is measured is June-September 2020 through June-September 2021. Data supplied in annual reports from providers or supervisors (such as the Central Bank) is usually aligned with the calender or fiscal year (which may vary from provider to provider). 
 
-Measures of the market for credit from FinAccess are not a substitute for measures obtained from supply-side sources. However, they are complementary and offer a view of the market that supply side data sources cannot provide. For example, published publicly available supply-side figures rarely disaggregate indicators across key socio-economic and demographic characteristics, such as gender, income, geographic location and age. Demand-side data provides a comprehensive view of borrowing behavior that spans use of loans from both formal and informal sources of credit. In addition surveys provide data that can better help contextualize the demand for lending, such as the reasons individuals are borrowing and whether borrowers are having difficulty repaying. 
+Measures of the market for credit from FinAccess are not a substitute for measures obtained from supply-side sources. However, they are complementary and offer a view of the market that supply side data sources cannot provide. For example, publicly available supply-side figures published in annual reports or financial statements rarely disaggregate indicators across important socio-economic and demographic characteristics, such as gender, income, livelihood, geographic location and age. Demand-side data provides a comprehensive view of borrowing behavior that spans use of loans from both informal and formal sources of credit. The former continues to be an important source of liquidity in Kenya so any analysis of credit markets that omits borrowing from informal lenders will be incomplete in this context. In addition, surveys provide data that can better help contextualize the demand for lending, such as the reasons individuals are borrowing and whether borrowers are having difficulty repaying. 
 
-The author highlights the limitations of survey data in the context of understanding the composition and dynamics of credit markets in Kenya to remind readers that for many questions, any single source or piece of data offers only partial or incomplete answers and encourages readers to build a portfolio of evidence that includes data published from administrative sources. 
-
-### Fuliza and M-Shwari
-This report uses several questions from FinAccess to estimate the annual market for loans by volume and value for a range of credit providers. The figure below shows FinAccess estimates for the total value of Fuliza and M-Shwari annual loan disbursements alongside those reported by Safaricom in its annual sustainability report. There is a very large difference in the value of yearly borrowing from Fuliza: FinAccess measured a total of KSh 53 billion in loans disbursed between September 2020 through September 2021. By March 30th, 2021 Safaricom reported KSh 351 billion in loans, over 6 times the value reported in FinAccess. The differences are much smaller with M-Shwari.
+### Reconciling differences in demand and supply-side estimate of credit flows
+This report uses several questions from FinAccess to estimate the annual market for loans by volume and value for a range of credit providers. The figure below shows FinAccess estimates for the total value of loan disbursements from Fuliza, M-Shwari and Commercial Banks alongside those reported by Safaricom in its annual sustainability report. There is a very large difference in the value of yearly borrowing from Fuliza in 2021 (the first year Fuliza loans were captured in Finaccess) and a widening gap in the value of commercial bank loans to the household sector (as reported by the Central Bank of Kenya) with FinAccess. FinAccess measured a total of KSh 53 billion in Fuliza loans disbursed between September 2020 through September 2021. By March 30th, 2021 Safaricom reported KSh 351 billion in loans, over 6 times the value reported in FinAccess. The differences are much smaller with M-Shwari.
 
 ```{r, fig.width = 12, fig.asp = 0.6}
 #| label: fig-fuliza_favsaf
@@ -90,7 +94,31 @@ mshwari <- tibble(
   "total_disbursed_value_b" = c(83.3, 97.5, 129.6, 94.5, 86.1)
 )
 
-supplyside <- bind_rows(fuliza, mshwari) %>% mutate(source = "Safaricom Sustainability Report 2022 & 2023")
+mshwari <- tibble(
+  "year" = c(2018.25, 2019.25, 2020.25, 2021.25, 2022.25), 
+  "product" = rep("M-Shwari*", 5), 
+  "customers_m" = c(3.26, 3.99, 4.66, 3.98, 4.67), 
+  "total_disbursed_volume_m" = rep(NA, 5), 
+  "total_disbursed_value_b" = c(83.3, 97.5, 129.6, 94.5, 86.1)
+)
+
+cbk <- read_csv("data/cbk_loansbysector.csv") %>% 
+  mutate(
+    sector = str_trim(sector), 
+    personal = ifelse(sector == "Personal/Household", "Personal/Household", "Other")
+  ) %>% 
+  group_by(year, personal) %>% 
+  summarise(
+    total_disbursed_value_b = sum(gross_loans)*1e6/1e9
+  ) %>% 
+  mutate(
+    year = year + 0.9, 
+    product = "Bank loans**", 
+    source = "Annual report",
+    source2 = "Central Bank of Kenya"
+  ) %>% filter(personal == "Personal/Household")
+
+supplyside <- bind_rows(fuliza, mshwari) %>% mutate(source = "Annual report", source2 = "Safaricom Results Booklet")
 
 # Indicators used in this figure
 indicators <- c("ind_totalborrowed_pastyear_bylender")
@@ -106,8 +134,24 @@ demandside <- loans_by_slice(loans_data_pool, indicators, slicevar, groups) %>%
   mutate(product = ifelse(group_cat_val == "Mobile money operator: Fuliza", "Fuliza", "M-Shwari*")) %>% 
   mutate(total = total/1e9, source = "FinAccess") %>% 
   select(year = year_c, product, total_disbursed_value_b = total, source)
+
+demandside_banks <- loans_by_slice(loans_data_pool, indicators, slicevar, groups) %>% 
+  ungroup() %>% 
+  filter(group_cat_val %in% c("Bank: Mobile", "Bank: Personal or business", "Bank: Overdraft or credit card")) %>% 
+  group_by(year_fct) %>% 
+  summarize(
+    total_disbursed_value_b = sum(total)/1e9
+  ) %>% 
+  ungroup() %>% 
+  mutate(year = ifelse(year_fct == "2021", 2021.7, 2018.9), 
+         product = "Bank loans**", 
+         source = "FinAccess") 
   
-chart_df <- bind_rows(supplyside, demandside) %>% mutate(group = paste(product, source, sep = "-"))
+  
+chart_df <- bind_rows(supplyside, demandside, cbk, demandside_banks) %>% mutate(group = paste(product, source, sep = "-")) %>% 
+  mutate(
+    product = factor(product, levels = c("Fuliza", "M-Shwari*", "Bank loans**"))
+  )
 
 ggplot(data = chart_df, 
        aes(x = year, 
@@ -117,25 +161,26 @@ ggplot(data = chart_df,
   facet_wrap(~ product, nrow = 1, scales = "fixed") + 
   geom_line(size = 2.25) + 
   geom_point(size = 3.75, shape = 21, fill = "white") +
-  geom_text(aes(label = round(total_disbursed_value_b, 0)), vjust = 0, nudge_y = 15, show.legend = FALSE) +
-  scale_color_manual(values = c("FinAccess" = "#F90093", "Safaricom Sustainability Report 2022 & 2023" = "#610F7F")) +
+  geom_text(aes(label = round(total_disbursed_value_b, 0)), vjust = -0.6, show.legend = FALSE) +
+  scale_y_continuous(limits = c(0, 1100)) + 
+  scale_color_manual(values = c("FinAccess" = "#F90093", "Annual report" = "#610F7F")) +
   guides(color = guide_legend(title = NULL)) + 
   labs(title = "Figure 1", 
-         subtitle = "Total annual value of loan disbursements (KSh billions), supply and demand-side estimates",
+         subtitle = str_wrap("Total annual value of loan disbursements (KSh billions), supply and demand-side estimates", 60),
          y = "KSh billions", 
          x = NULL, 
-       caption = str_wrap("Notes: For comparability, estimates of the total value of disbursements have been positioned in continuous time at the end-point of the measurement period that they represent. For example, Safaricom reports figures corresponding to the cumulative value of loans disbursed during their fiscal year. Since FY2021 spans April 1st, 2020 through March 30th, 2021, figures corresponding to FY2021 are positioned at 2021.25. Estimates from FinAccess are derived from a question asking about total loans taken from specific providers during the past 12 months, so the end-point of this period is the time of data collection. For the 2021 FinAccess survey, this corresponds to August, so the estimate is positioned at 2021.7. FinAccess derived estimates for M-Shwari are not strictly comparable with Safaricom published figures for M-Shwari because FinAccess collects data on 'Loans from mobile banking' which includes M-Shwari as well as other mobile banking loan providers such as KCB M-Pesa, as such estimates from FinAccess for M-Shwari specifically are biased upwards.", 155)) + 
+       caption = str_wrap("Notes: For comparability, estimates of the total value of disbursements have been positioned in continuous time at the end-point of the measurement period that they represent. For example, Safaricom reports figures corresponding to the cumulative value of loans disbursed during their fiscal year. Since FY2021 spans April 1st, 2020 through March 30th, 2021, figures corresponding to FY2021 are positioned at 2021.25. Estimates from FinAccess are derived from a question asking about total loans taken from specific providers during the past 12 months, so the end-point of this period is the time of data collection. For the 2021 FinAccess survey, this corresponds to August, so the estimate is positioned at 2021.7. *FinAccess derived estimates for M-Shwari are not strictly comparable with Safaricom published figures for M-Shwari because FinAccess collects data on 'Loans from mobile banking' which includes M-Shwari as well as other mobile banking loan providers such as KCB M-Pesa, as such estimates from FinAccess for M-Shwari specifically are biased upwards. ** Supply-side data for bank loans correspond to Personal/Household gross loans from the Bank Supervision Annual reports published by the Central Bank of Kenya", 150)) + 
   theme_custom(scale_f = 1.2) + 
-  theme(legend.position = "bottom", legend.direction = "horizontal", strip.text = element_text(face = "bold"))
+  theme(legend.position = "bottom", legend.direction = "horizontal", strip.text = element_text(face = "bold"), axis.text = element_text(face = "plain"))
 
 
 ```
 
-What might account for this difference? Estimates of the value of loans disbursed on an annual basis from FinAccess (for borrowers of a specific type of loan) can be decomposed as follows: 
+What might account for the large difference seen with Fuliza? To identify the potential causes of the discrepancy, it is helpful to unpack how estimates of the value of loans disbursed on an annual basis are computed from FinAccess (for borrowers of a specific type of loan). The equation below highlights the key components:
 
 $$\sum_{n=1}^{B} N_{loanspastyear} * P_{recentloan} $$ 
 
-where $B=$ Total number of borrowers,  $N_{loanspastyear}=$ Total number of loans taken in the past year, $P_{recentloan}=$ Amount borrowed (for most recent loan)$. In computing the total value of borrowing for a specific borrower, the value of the borrower's most recent loan is assumed to apply for all previous loans taken in the year. For Fuliza, the values of these parameters derived from FinAccess and Safaricom (where available) are provided in the table below. One reason that the total value of Fuliza disbursements is substantially lower in FinAccess is that the survey captured an estimated around 1 million fewer unique Fuliza borrowers than what Safaricom reported. However, the main reason FinAccess underestimates the total value of annual loans disbursed (compared to supply-side figures) is that it measures a much lower intensity of loan-taking per borrower than implied by Safaricom's own numbers. 
+where $B=$ Total number of borrowers,  $N_{loanspastyear}=$ Total number of loans taken in the past year, $P_{recentloan}=$ Amount borrowed (for most recent loan)$. In computing the total value of borrowing for a specific borrower, the value of the borrower's most recent loan is assumed to apply for all previous loans taken in the year. For Fuliza, the value of the components of total annual loan disbursements obtained from FinAccess and Safaricom annual reports are provided in the table below. The median size of Fuliza loans from FinAccess (KSh 500) closely matches Safaricom's 'global' Fuliza transaction size obtained by dividing the total annual disbursements (KSh 503 billion) by the total number of annual transactions (787.1 million). Where differences arise between FinAccess and Safaricom is with respect to unique borrowers and annual transactions per borrower. FinAccess captured an estimated 1 million fewer unique Fuliza borrowers than what Safaricom reported. However, the main reason FinAccess underestimates the total value of annual loans disbursed (compared to supply-side figures) is that it measures a much lower intensity of loan-taking per borrower than implied by Safaricom's own numbers: 9.3 loans per borrower per year (one loan every 39 days) versus 123 loans per borrower per year (one loan every 3 days). 
 
 ```{r, fig.width = 12, fig.asp = 0.5}
 #| label: fig-fuliza_favsaf_table
@@ -163,130 +208,7 @@ t(fuliza_demand) %>% kbl() %>%
 
 ## 1. How large is the market for loans in Kenya? 
 
-An estimated 76 million loans in Kenya were taken by borrowers in 2021.^[This total excludes purchases of goods on credit from shopkeepers, credit cards and loans from buyers of agricultural produce]. Over half of these loans (54%) were mobile money overdrafts using M-PESA’s Fuliza service, and a further 12 percent were digital loans from mobile banking services (11%) or fintech apps (1%) (@fig-marketbyvol). Social networks (friends, family and neihbors) accounted for 20% of loans disbursed, while other informal sources such as Chamas (voluntary savings or investment groups), shopkeepers, employers or buyers collectively contributed around 10%. The big picture that the data highlights is that that two-thirds of the demand for cash loans (by volume) in Kenya in 2021 was mediated through digital technologies, 30% was mediated through informal or relational agreements and 5% was mediated through traditional loan contracts at a financial institution.
-
-```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvol
-#| echo: false
-#| warning: false
-#| fig-cap: "The market for loans by volume"
-
-# Indicators used in this figure
-indicators <- c("ind_nloans_pastyear_bylender")
-groups <- c("lender_agg3_str" = "Lender")
-  
-plot_text <- list(
-  title = "Figure 2. \n Total yearly volume of loans disbursed by lender (2021)",
-  subtitle = "",
-  caption = CAPTION
-) 
-
-# Total volume of loans: 
-#get_indicator_total(loans_data, indicators, groups)
-
-fig_tree_loans_by_volume(loans_data, indicators, groups, plot_text)
-
-```
-
-Between 2019 and 2021, the total volume of loans disbursed in Kenya decreased by 10%, from 83.1 million to 75.8 million. Digital loans remained the dominant form of borrowing, though their share declined from 74% (61.2 million) in 2019 to 66% (50 million) in 2021. The use of social networks for borrowing increased significantly, rising from 13% (10.3 million) in 2019 to 21% (15.5 million) in 2021. The volume of traditional loans from financial institutions (Banks, Saccos, MFIs) fell by nearly 1 million and their market share fell from 4% to 3%. 
-
-```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvolbyyear
-#| echo: false
-#| warning: false
-#| fig-cap: "The market for loans by volume, 2019 and 2021"
-
-# Indicators used in this figure
-indicators <- c("ind_nloans_pastyear_bylender")
-groups <- c("lender_agg1_str" = "Lender")
-slicevar <- c("Year" = "year_fct")
-
-plot_text <- list(
-  subtitle = "Total yearly volume of loans (millions) disbursed by lender and year",
-  title = "Figure 3",
-  caption = CAPTION
-) 
-
-plot_label <- list(
-  type = "both", 
-  threshold = 1.5e6, 
-  nudge_y = 1e6, 
-  ymax = 92e6
-)
-
-# Total volume of loans: 
-#get_indicator_total(loans_data, indicators, groups)
-
-fig_bar_loans_by_slice(loans_data_pool, indicators, slicevar, groups, plot_text, plot_label)
-
-```
-
-@fig-marketbyvolbywealthyear breaks the total volume of loans disbursed by both the source of the loan and the borrower's household wealth ^[Household wealth is proxied using data on the quality of housing conditions and household ownership of physical assets]. Between 2019 and 2021, while the total volume of loans used by borrowers in the middle 40% and upper 20% of the household wealth distribution remained steady, the volume of loans used by borrowers in the poorest 40% of the distribution fell by 30% (from 22.4 million to 16.1 million loans). The drop is a result of significantly lower disbursements to poorer borrowers from digital lending services. 
-
-```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvolbygenderyear
-#| echo: false
-#| warning: false
-#| fig-cap: "The market for loans by volume and borrower's household wealth, 2019 and 2021"
-
-# Indicators used in this figure
-indicators <- c("ind_nloans_pastyear_bylender")
-groups <- c("lender_agg1_str" = "Lender")
-slicevar <- c("Gender" = "resp_gender_fct")
-
-plot_text <- list(
-  subtitle = "Total yearly volume of loans (millions) disbursed by lender and gender, 2019 and 2021",
-  title = "Figure 4",
-  caption = CAPTION
-) 
-
-plot_label <- list(
-  type = "both", 
-  threshold = 1.75e6, 
-  nudge_y = 0.5e6, 
-  ymax = 50e6
-)
-
-# Total volume of loans: 
-#get_indicator_total(loans_data, indicators, groups)
-
-fig_bar_loans_by_slice_year(loans_data_pool, indicators, slicevar, groups, plot_text, plot_label)
-
-```
-
-```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvolbywealthyear
-#| echo: false
-#| warning: false
-#| fig-cap: "The market for loans by volume and borrower's household wealth, 2019 and 2021"
-
-# Indicators used in this figure
-indicators <- c("ind_nloans_pastyear_bylender")
-groups <- c("lender_agg1_str" = "Lender")
-slicevar <- c("Household wealth" = "hh_wlth_group")
-
-plot_text <- list(
-  subtitle = "Total yearly volume of loans (millions) disbursed by lender and borrower's household wealth, 2019 and 2021",
-  title = "Figure 5",
-  caption = CAPTION
-) 
-
-plot_label <- list(
-  type = "both", 
-  threshold = 1.75e6, 
-  nudge_y = 0.5e6, 
-  ymax = 40e6
-)
-
-# Total volume of loans: 
-#get_indicator_total(loans_data, indicators, groups)
-
-fig_bar_loans_by_slice_year(loans_data_pool, indicators, slicevar, groups, plot_text, plot_label)
-
-```
-
-
-A total of KSh 978 billion was disbursed by lenders in 2021 (@fig-marketbyval). Banks were the largest source, disbursing KSh 340.4 billion (35%), followed by Sacco/MFIs at KSh 263.35 billion (27%). Digital loans, including mobile banking, Fuliza and lending apps, accounted for a combined value of KSh 113 billion (12%), while informal lenders including social network, chama and shopkeeper loans accounted for KSh 186 billion (20%). The market for loans from a value perspective, is the mirror image of the volume perspective. Lending mediated through in-person agreements at formal financial institutions, while accounting for less then 5% of the volume, accounts for over two thirds of the total value of lending. Digital loans, while accounting for two-thirds of the volume accounts for 12% of the total value of lending.  
+A total of KSh 1,028 billion was disbursed by lenders in 2021 (@fig-marketbyval). Banks were the largest source, disbursing KSh 345 billion (34%), followed by Sacco/MFIs at KSh 264 billion (26%). Digital loans, including mobile banking, Fuliza and lending apps, accounted for a combined value of KSh 120 billion (11%), while informal lenders including social network, chama and shopkeeper loans accounted for KSh 220 billion (22%). The market for loans from a volume perspective, is the mirror image of the value perspective. Lending mediated through in-person agreements at formal financial institutions, while accounting for less then 5% of the volume, accounts for over two thirds of the total value of lending. Digital loans, while accounting for two-thirds of the volume accounts for 12% of the total value of lending.  
 
 ```{r, fig.width = 12, fig.asp = 0.6}
 #| label: fig-marketbyval
@@ -299,7 +221,7 @@ indicators <- c("ind_totalborrowed_pastyear_bylender")
 groups <- c("lender_agg3_str" = "Lender")
   
 plot_text <- list(
-  title = "Figure 6. \n Total yearly value of loans disbursed by lender (2021)",
+  title = "Figure 2. \n Total yearly value of loans disbursed by lender (2021)",
   subtitle = "",
   caption = CAPTION
 ) 
@@ -310,13 +232,42 @@ fig_tree_loans_by_value(loans_data, indicators, groups, plot_text)
 
 ```
 
-Compared to 2019, the total value of loans disbursed in 2021 fell by 30% (from KSh 1,420.5 to KSh 978 billion) (@fig-marketbyvalbyyear). Much of this decline is attributable to Bank lending which fell by over KSh 300 billion (from KSh 690 to 340 billion) and Sacco lending which fell by nearly KSh 100 billion. Loans from social networks partially offset this decline, which increased from KSh 80 billion (6% of the total) in 2019 to KSh 113 billion (12%) in 2021. 
+An estimated 107 million loans in Kenya were taken by borrowers in 2021. Nearly half of these loans (49%) were mobile money overdrafts using M-PESA’s Fuliza service, and a further 9 percent were digital loans from mobile banking services (8%) or fintech apps (1%) (@fig-marketbyvol). Social networks (friends, family and neihbors) accounted for 14% of loans disbursed, while other informal sources such as Chamas (voluntary savings or investment groups), shopkeepers, employers or buyers collectively contributed around 24% of the total. The big picture that the data highlights is that nearly 60% of the demand for loans (by volume) in Kenya in 2021 was mediated through digital technologies, 37% was mediated through informal or relational agreements and less than 5% was mediated through traditional loan contracts at financial institutions.
 
 ```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvalbyyear
+#| label: fig-marketbyvol
 #| echo: false
 #| warning: false
-#| fig-cap: "The market for loans by value, 2019 and 2021"
+#| fig-cap: "The market for loans by volume"
+
+# Indicators used in this figure
+indicators <- c("ind_nloans_pastyear_bylender")
+groups <- c("lender_agg3_str" = "Lender")
+  
+plot_text <- list(
+  title = "Figure 3. \n Total yearly volume of loans disbursed by lender (2021)",
+  subtitle = "",
+  caption = CAPTION
+) 
+
+# Total volume of loans: 
+#get_indicator_total(loans_data, indicators, groups)
+
+fig_tree_loans_by_volume(loans_data, indicators, groups, plot_text)
+
+```
+
+Compared to 2019, the total annual value of loans disbursed in 2021 fell by 30% (from KSh 1,452 to KSh 1,028 billion) (@fig-marketbyyear). Much of this decline is attributable to Bank lending which fell by over KSh 300 billion (from KSh 691 to 345 billion) and lending from Saccos or MFIs which fell by KSh 92 billion. Loans from social networks partially offset this decline, which increased from KSh 86 billion in 2019 to KSh 117 billion in 2021. 
+
+On the other hand, the total volume of loans disbursed in Kenya increased by 16%, from 92 to 107 million. Loans from formal institutions remained flat, with digital loans remaining the dominant form of borrowing, though their share declined as the use of social networks for borrowing (broadly defined to include employers in addition to friends and family) and shopkeeper credit increased significantly, rising from 23 million in 2019 to 37 million in 2021. The volume of traditional loans from financial institutions (Banks, Saccos, MFIs) fell by nearly 1 million. 
+
+While both the total number of unique borrowers^[Unique borrowers are defiend as those who reported taking a loan from a specific provider in the past year and provided details on their most recent loan] increased slightly from 14.1 to 14.7 million between 2019 and 2021, and the average number of loans used per borrower per year (from all credit providers) increased slightly (from 6.5 to 7.3), the average size of each loan secured by borrowers fell substantially, from KSh 42,400 to 25,312 (the median loan size remained at Ksh 1,500 in 2019 and 2021). The decline in the overall market for credit between 2019 and 2021 is a result of a change in the composition of borrowing away from longer-term, larger-value traditional financial institution loans (such as personal or business loans from Banks, Saccos and MFIs), towards lower-value, short-term digital and informal loans. 
+
+```{r, fig.width = 12, fig.asp = 0.5}
+#| label: fig-marketbyyear
+#| echo: false
+#| warning: false
+#| fig-cap: "The market for loans by value and volume, 2019 and 2021"
 
 # Indicators used in this figure
 indicators <- c("ind_totalborrowed_pastyear_bylender")
@@ -324,114 +275,126 @@ groups <- c("lender_agg1_str" = "Lender")
 slicevar <- c("Year" = "year_fct")
 
 plot_text <- list(
-  title = "Figure 7",
-  subtitle = " Total yearly value of loans (KSh billions) disbursed by lender and year",
-  caption = CAPTION
+  title = "Figure 4A",
+  subtitle ="Total yearly value of loans (KSh billions) disbursed by lender and year",
+  caption = NULL
 ) 
 
 plot_label <- list(
-  type = "both", 
-  threshold = 5e9, 
-  nudge_y = 10e9, 
+  type = "valueonly", 
+  threshold = c("ind_totalborrowed_pastyear_bylender" = 5e9, "ind_nloans_pastyear_bylender" = 1.75e6), 
+  hjust =  c("ind_totalborrowed_pastyear_bylender" = 0.5, "ind_nloans_pastyear_bylender" = 0.5),  
+  vjust =  c("ind_totalborrowed_pastyear_bylender" = -0.4, "ind_nloans_pastyear_bylender" = -0.4),  
   ymax = 1500e9
 )
+
 #get_indicator_total(loans_data, indicators, groups)
 
-fig_bar_loans_by_slice(loans_data_pool, indicators, slicevar, groups, plot_text, plot_label)
-
-```
-
-@fig-marketbyvalbywealthyear breaks the total value of loans disbursed by both the source of the loan and the borrower's household wealth and shows that the majority of the decline in the value of loan disbursements resulted from less credit flowing to borrowers in households ranking in the top 20% of the wealth distribution. The total value of Bank, Sacco and digital loans channeled to these wealthier borrowers collapsed by around 50% (from KSh 908 to Ksh 463 billion) between 2019 and 2021, while loans from friends and family rose by 50% (from KSh 33 to Ksh 50 billion). In contrast, the total value of loans disbursed to borrowers in households ranking the bottom 40% of the wealth distribution almost doubled, rising from KSh 56.1 billion in 2019 to KSh 98.1 billion in 2021. 
-
-```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvalbygenderyear
-#| echo: false
-#| warning: false
-#| fig-cap: "The market for loans by volume, 2019 and 2021"
+p1 <- fig_bar_loans_by_slice(loans_data_pool, indicators, slicevar, facetvar = NULL, groups, plot_text, plot_label, bar_width = 0.4, reverse_legend = FALSE)
 
 # Indicators used in this figure
-indicators <- c("ind_totalborrowed_pastyear_bylender")
+indicators <- c("ind_nloans_pastyear_bylender")
 groups <- c("lender_agg1_str" = "Lender")
-slicevar <- c("Gender" = "resp_gender_fct")
+slicevar <- c("Year" = "year_fct")
 
 plot_text <- list(
-  subtitle = "Total yearly value of loans (millions) disbursed by lender, gender & year",
-  title = "Figure 8",
-  caption = CAPTION
+  subtitle = "Total yearly volume of loans (millions) disbursed by lender and year",
+  title = "Figure 4B",
+  caption = NULL
 ) 
 
-plot_label <- list(
-  type = "valueonly", 
-  threshold = 20e9, 
-  nudge_y = 10e9, 
-  ymax = 1100e9
-)
+plot_label[["ymax"]] <- 92e6
 
-fig_bar_loans_by_slice_year(loans_data_pool, indicators, slicevar, groups, plot_text, plot_label)
+# Total volume of loans: 
+#get_indicator_total(loans_data, indicators, groups)
+
+p2 <- fig_bar_loans_by_slice(loans_data_pool, indicators, slicevar, facetvar = NULL, groups, plot_text, plot_label, bar_width = 0.4, reverse_legend = FALSE)
+
+# Combining plots
+
+p1 + p2 + plot_layout(guides = 'collect')  &
+    plot_annotation(
+      caption =  CAPTION
+  ) & 
+    theme(
+      plot.caption=element_text(hjust=0, color="grey40", size=11)
+    )
 
 ```
 
-```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvalbywealthyear
+```{r, fig.width = 12, fig.asp = 0.45}
+#| label: fig-loanmetrics
 #| echo: false
 #| warning: false
-#| fig-cap: "The market for loans by volume, 2019 and 2021"
+#| fig-cap: "Unique borrowers, size of loans and loans taken per year, 2019 and 2021"
 
-# Indicators used in this figure
-indicators <- c("ind_totalborrowed_pastyear_bylender")
-groups <- c("lender_agg1_str" = "Lender")
-slicevar <- c("Household wealth" = "hh_wlth_group")
+levels = c("All sources", "Bank",  "Sacco/MFI", "Digital", "Chama", "Social network", "Shopkeeper", "Government", "Other") 
 
+# Total number of borrowers
+indicators <- c("has_recent_loan")
+groups <- c("lender_agg1_str" = "Source of loan")
+slicevar <- c("Year" = "year_fct")
+  
 plot_text <- list(
-  subtitle = "Total yearly value of loans (millions) disbursed by lender, household wealth & year",
-  title = "Figure 9",
-  caption = CAPTION
+  title = "Figure 5A",
+   subtitle = "Total borrowers (m)",
+  yaxis = NULL,
+  xaxis = "Adults (N)",
+  caption =  NULL
 ) 
 
-plot_label <- list(
-  type = "valueonly", 
-  threshold = 20e9, 
-  nudge_y = 10e9, 
-  ymax = 1100e9
-)
+p1 <- fig_bar_borrowers_by_lender(respdebt_data_pool_agg1, indicators, slicevar, groups, plot_text, value = "total", group_cat_levels = levels)
 
-fig_bar_loans_by_slice_year(loans_data_pool, indicators, slicevar, groups, plot_text, plot_label)
+
+# Indicators used in this figure
+indicators <- c("loan_principal")
+groups <- c("fullsample" = "All sources", "lender_agg1_str" = "Source of loan")
+slicevar <- c("Year" = "year_fct")
+  
+plot_text <- list(
+  title = "Figure 5B",
+   subtitle = "Average size of loan (KSh)",
+  yaxis = NULL,
+  xaxis = "Loan principal (KSh)",
+  caption =  NULL
+) 
+
+p2 <- fig_bar_loansize_by_lender(loans_data_pool, indicators, slicevar, groups, plot_text, value = "mean", group_cat_levels = levels) + theme(axis.text.y = element_blank())
+
+
+# Indicators used in this figure
+indicators <- c("nloans_pastyear_cd")
+groups <- c("lender_agg1_str" = "Source of loan")
+slicevar <- c("Year" = "year_fct")
+  
+plot_text <- list(
+  title = "Figure 5C",
+   subtitle = "Loans taken per year per borrower (average)",
+  yaxis = NULL,
+  xaxis = "Loans (N)",
+  caption =  NULL
+) 
+
+p3 <- fig_bar_loanfreq_by_lender(respdebt_data_pool_agg1, indicators, slicevar, groups, plot_text, value = "mean", group_cat_levels = levels) + theme(axis.text.y = element_blank())
+
+(p1 + p2 + p3) + plot_layout(guides = 'collect') & 
+    plot_annotation(
+      caption =  CAPTION
+  ) & 
+    theme(
+      legend.position = "bottom", 
+      legend.direction = "horizontal", 
+      plot.caption=element_text(hjust=0, color="grey40", size=11), 
+      axis.text = element_text(face = "plain")
+    )
+
 
 ```
 
-@fig-marketbyvalbyliveyear reveals lending to business owners fell by 70%, from KSh 579 billion to KSh 184 billion between 2019 and 2021. This decline was overwhelmingly a result of bank lending to business owners collapsing by 90 percent. Another factor contributes to the lower value of lending to businesses: the share of adults deriving most of their income from their business fell from 17 to 14% between 2019 and 2021 (among the wealthiest 20% of households, the share fell from 30 to 22%). 
 
-```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvalbyliveyear
-#| echo: false
-#| warning: false
-#| fig-cap: "The market for loans by volume, 2019 and 2021"
+@fig-marketbysizesource shows the distribution of the most recent loans used by borrowers by the amount borrowed (the loan principal) and the source of the loan for 2019 and 2021. A dominant majority of loans (nearly 60%) were less than KSh 2,500 in both 2019 and 2021, just over 20 percent were between KSh 2,500 and KSh 10,000 and 15 percent were between KSh 10,000 and KSh 50,000. Shopkeeper loans and digital loans dominate the market for small loans while formal, non-digital loans from Banks and Saccos dominate the market for large loans. Between 2019 and 2021, the distribution of recent loans shifted moderately to higher frequency smaller loans as the share of loans greater than KSh 10,000 fell. In 2021, Fuliza accounted for nearly 1 in 3 of the most recent loans used that were less than KSh 2,500. This data suggests that Fuliza is beginning to crowd out shopkeeper credit whose share of small loans (< KSh 2,500) fell from 34% to 23% between 2019 and 2021. 
 
-# Indicators used in this figure
-indicators <- c("ind_totalborrowed_pastyear_bylender")
-groups <- c("lender_agg1_str" = "Lender")
-slicevar <- c("Main livelihood" = "resp_live_group_fct")
-
-plot_text <- list(
-  subtitle = "Total yearly value of loans (millions) disbursed by lender, borrower's main income source & year",
-  title = "Figure 10",
-  caption = CAPTION
-) 
-
-plot_label <- list(
-  type = "valueonly", 
-  threshold = 20e9, 
-  nudge_y = 10e9, 
-  ymax = 650e9
-)
-
-fig_bar_loans_by_slice_year(loans_data_pool %>% filter(!is.na(resp_live_group_fct)), indicators, slicevar, groups, plot_text, plot_label)
-
-```
-
-@fig-marketbysizesource shows the distribution of loans by the amount borrowed (the loan principal) and the source of the loan for 2019 and 2021. A dominant majority of loans (nearly 60%) were less than KSh 2,500 in both 2019 and 2021, just over 20 percent were between KSh 2,500 and KSh 10,000 and 15 percent were between KSh 10,000 and KSh 50,000. Shopkeeper loans and digital loans dominate the market for small loans while formal, non-digital loans from Banks and Saccos dominate the market for large loans. Between 2019 and 2021, the distribution of loans shifted moderately to smaller loans as the share of loans greater than KSh 50,000 fell. In 2021, Fuliza accounted for nearly 1 in 3 loans less than KSh 2,500 and appears to be crowding out shopkeeper credit whose share fell from 33.6% of small loans (< KSh 2,500) in 2019 to 23.4% of small loans in 2021 ^[This figure includes both cash loans from shopkeepers as well as purchases of goods and services on credit]. 
-
-```{r, fig.width = 12, fig.asp = 0.6}
+```{r, fig.width = 12, fig.asp = 0.5}
 #| label: fig-marketbysizesource
 #| echo: false
 #| warning: false
@@ -443,101 +406,238 @@ groups <- c("lender_agg1_str" = "Lender")
 slicevar <- c("Year" = "year_fct")
 
 plot_text <- list(
-  title = "Figure 11",
-  subtitle = "Most recent loans by size and source",
+  title = "Figure 6",
+  subtitle = "Distribution of most recent loans by size and source (%)",
   xaxis = "Loan principal (KES)", 
-  yaxis= "Loans (%)", 
+  yaxis= NULL, 
   caption = CAPTION
 ) 
 
-fig_bar_loans_by_size_and_source(loans_data_pool, indicators, slicevar, groups, plot_text)
+fig_bar_loans_by_size_and_source(loans_data_pool, indicators, slicevar, groups, plot_text) + theme(strip.text.x = element_text(face = "bold"), axis.text = element_text(face = "plain"))
 
 ```
 
+@fig-marketbygenderyear through @fig-marketbylocyear show the value and volume of annual lending to different segments of the market, providing a perspective on borrowing by gender, household wealth^[Household wealth is proxied using data on the quality of housing conditions and household ownership of physical assets], livelihood and household location. 
 
-```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-loanprincipalbylender
+Between 2019 and 2021, the total value of loans disbursed to men declined by nearly 40 percent as a result of lower disbursements from formal financial institutions and digital lenders. On the other hand total disbursements to women stayed flat, as aggregate disbursements from Saccos, MFIs, chamas, social networks and shopkeepers offset declines in disbursements from banks among women. 
+
+@fig-marketbywealthyear shows a substantial decline in credit flowing to borrowers in households ranking in the top 20% of the wealth distribution. The total value of Bank, Sacco and digital loans channeled to these wealthier borrowers collapsed by around 50% (from KSh 909 to Ksh 471 billion) between 2019 and 2021, while loans from friends and family rose by 50% (from KSh 33 to Ksh 51 billion). In contrast, the total value of loans disbursed to borrowers in households ranking the bottom 40% of the wealth distribution almost doubled, rising from KSh 69 in 2019 to KSh 113 billion in 2021.
+
+@fig-marketbyliveyear reveals lending to business owners fell by 70%, from KSh 584 to KSh 192 billion between 2019 and 2021. This decline was overwhelmingly a result of bank lending to business owners falling by 90 percent. Another factor contributes to the lower value of lending to businesses: the share of adults deriving most of their income from their business fell from 17 to 14% between 2019 and 2021 (among the wealthiest 20% of households, the share fell from 30 to 22%). Total annual loan disbursements to employed adults declined by 17 percent, primarily as a result of lower Sacco or MFI lending to this group. Bank lending to the employed increased slightly from KSh 258 to 262. 
+
+
+```{r, fig.width = 12, fig.asp = 0.5}
+#| label: fig-marketbygenderyear
 #| echo: false
 #| warning: false
-#| fig-cap: "Median loan principal by lender, 2019 and 2021"
+#| fig-cap: "The market for loans by gender, 2019 and 2021"
 
 # Indicators used in this figure
-indicators <- c("loan_principal_cd")
-groups <- c("lender_agg3_str" = "Source of loan")
-slicevar <- c("Year" = "year_fct")
-  
-plot_text <- list(
-  title = "Figure 12",
-   subtitle = "Median loan principal by lender, 2019 & 2021",
-  yaxis = NULL,
-  xaxis = "Loan principal (KSh)",
-  caption =  paste(CAPTION)
-) 
-
-fig_bar_loansize_by_lender(respdebt_data_pool, indicators, slicevar, groups, plot_text)
-
-
-```
-
-```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvolbyreasonyear
-#| echo: false
-#| warning: false
-#| fig-cap: "The market for loans by volume, 2019 and 2021"
-
-# Indicators used in this figure
-indicators <- c("ind_nloans_pastyear_bylender")
+#indicators <- c("ind_totalborrowed_pastyear_bylender", "ind_nloans_pastyear_bylender")
+indicators <- c("ind_totalborrowed_pastyear_bylender")
 groups <- c("lender_agg1_str" = "Lender")
-slicevar <- c("Main reason for borrowing" = "loan_reason_agg_str")
+slicevar <- c("Gender" = "resp_gender_fct")
+facetvar <- c("indicator_name")
 
 plot_text <- list(
-  subtitle = "Total yearly volume of loans (millions) disbursed by lender, main reason for taking the loan & year",
-  title = "Figure 13",
-  caption = CAPTION
+  subtitle = "Total yearly value of loans disbursed by lender (KSh bilions)",
+  title = "Figure 7A",
+  caption = NULL
 ) 
 
 plot_label <- list(
   type = "valueonly", 
-  threshold = 1.75e6, 
-  nudge_y = 0.5e6, 
-  ymax = 50e6
+  threshold = c("ind_totalborrowed_pastyear_bylender" = 40e9, "ind_nloans_pastyear_bylender" = 1.75e6), 
+  hjust =  c("ind_totalborrowed_pastyear_bylender" = -0.2, "ind_nloans_pastyear_bylender" = -0.2),  
+  vjust =  c("ind_totalborrowed_pastyear_bylender" = 0.5, "ind_nloans_pastyear_bylender" = 0.5),  
+  ymax = 1500e9
 )
 
-fig_bar_loans_by_slice_year(loans_data_pool %>% filter(!is.na(loan_reason_agg_str)), indicators, slicevar, groups, plot_text, plot_label)
+p1 <- fig_bar_loans_by_slice_year_v2(loans_data_pool, indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width = 0.6, flip_coords = TRUE, show_legend = FALSE, legend_pos = "bottom")  + theme(strip.text.y.left = element_blank())
+
+# Indicators used in this figure
+#indicators <- c("ind_totalborrowed_pastyear_bylender", "ind_nloans_pastyear_bylender")
+indicators <- c("ind_nloans_pastyear_bylender")
+
+plot_text <- list(
+  subtitle = "Total yearly volume of loans disbursed by lender (millions)",
+  title = "Figure 7B",
+  caption = NULL
+) 
+
+plot_label[["ymax"]] <- 70e6
+
+p2 <- fig_bar_loans_by_slice_year_v2(loans_data_pool, indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width = 0.6, flip_coords = TRUE, show_legend = TRUE, legend_pos = "bottom")  + theme(strip.text.y.left = element_blank())
+
+(p1 / p2)  &
+    plot_annotation(
+      caption =  CAPTION
+  ) & 
+    theme(
+      plot.caption=element_text(hjust=0, color="grey40", size=11)
+    )
 
 ```
 
 ```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-marketbyvalbyreasonyear
+#| label: fig-marketbywealthyear
 #| echo: false
 #| warning: false
-#| fig-cap: "The market for loans by volume, 2019 and 2021"
+#| fig-cap: "The market for loans by household wealth, 2019 and 2021"
 
 # Indicators used in this figure
 indicators <- c("ind_totalborrowed_pastyear_bylender")
 groups <- c("lender_agg1_str" = "Lender")
-slicevar <- c("Main reason for borrowing" = "loan_reason_agg_str")
+slicevar <- c("Household wealth" = "hh_wlth_group")
+facetvar <- c("indicator_name")
 
 plot_text <- list(
-  subtitle = "Total yearly value of loans (billions) disbursed by lender, main reason for taking the loan & year",
-  title = "Figure 14",
-  caption = CAPTION
+  subtitle = "Total yearly value of loans disbursed by lender (KSh bilions)",
+  title = "Figure 8A",
+  caption = NULL
 ) 
 
 plot_label <- list(
   type = "valueonly", 
-  threshold = 20e9, 
-  nudge_y = 10e9, 
-  ymax = 620e9
+  threshold = c("ind_totalborrowed_pastyear_bylender" = 40e9, "ind_nloans_pastyear_bylender" = 1.75e6), 
+  hjust =  c("ind_totalborrowed_pastyear_bylender" = -0.2, "ind_nloans_pastyear_bylender" = -0.2),  
+  vjust =  c("ind_totalborrowed_pastyear_bylender" = 0.5, "ind_nloans_pastyear_bylender" = 0.5),  
+  ymax = 1300e9
 )
 
-fig_bar_loans_by_slice_year(loans_data_pool %>% filter(!is.na(loan_reason_agg_str)), indicators, slicevar, groups, plot_text, plot_label)
+p1 <- fig_bar_loans_by_slice_year_v2(loans_data_pool, indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width = 0.7, flip_coords = TRUE, show_legend = FALSE, legend_pos = "bottom")  + theme(strip.text.y.left = element_blank())
+
+# Indicators used in this figure
+#indicators <- c("ind_totalborrowed_pastyear_bylender", "ind_nloans_pastyear_bylender")
+indicators <- c("ind_nloans_pastyear_bylender")
+
+plot_text <- list(
+  subtitle = "Total yearly volume of loans disbursed by lender (millions)",
+  title = "Figure 8B",
+  caption = NULL
+) 
+
+plot_label[["ymax"]] <- 55e6
+
+p2 <- fig_bar_loans_by_slice_year_v2(loans_data_pool, indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width = 0.7, flip_coords = TRUE, show_legend = TRUE, legend_pos = "bottom")  + theme(strip.text.y.left = element_blank())
+
+(p1 / p2)  &
+    plot_annotation(
+      caption =  CAPTION
+  ) & 
+    theme(
+      plot.caption=element_text(hjust=0, color="grey40", size=11)
+    )
+
+
+```
+
+```{r, fig.width = 12, fig.asp = 0.6}
+#| label: fig-marketbyliveyear
+#| echo: false
+#| warning: false
+#| fig-cap: "The market for loans by livelihood, 2019 and 2021"
+
+# Indicators used in this figure
+indicators <- c("ind_totalborrowed_pastyear_bylender")
+groups <- c("lender_agg1_str" = "Lender")
+slicevar <- c("Main livelihood" = "resp_live_group_fct")
+facetvar <- c("indicator_name")
+
+plot_text <- list(
+  subtitle = "Total yearly value of loans disbursed by lender (KSh bilions)",
+  title = "Figure 9A",
+  caption = NULL
+) 
+
+plot_label <- list(
+  type = "valueonly", 
+  threshold = c("ind_totalborrowed_pastyear_bylender" = 30e9, "ind_nloans_pastyear_bylender" = 1.75e6), 
+  hjust =  c("ind_totalborrowed_pastyear_bylender" = -0.2, "ind_nloans_pastyear_bylender" = -0.2),  
+  vjust =  c("ind_totalborrowed_pastyear_bylender" = 0.5, "ind_nloans_pastyear_bylender" = 0.5),  
+  ymax = 700e9
+)
+
+p1 <- fig_bar_loans_by_slice_year_v2(loans_data_pool, indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width = 0.7, flip_coords = TRUE, show_legend = FALSE, legend_pos = "bottom")  + theme(strip.text.y.left = element_blank())
+
+# Indicators used in this figure
+indicators <- c("ind_nloans_pastyear_bylender")
+
+plot_text <- list(
+  subtitle = "Total yearly volume of loans disbursed by lender (millions)",
+  title = "Figure 9B",
+  caption = NULL
+) 
+
+plot_label[["ymax"]] <- 50e6
+
+p2 <- fig_bar_loans_by_slice_year_v2(loans_data_pool, indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width = 0.7, flip_coords = TRUE, show_legend = TRUE, legend_pos = "bottom")  + theme(strip.text.y.left = element_blank())
+
+(p1 / p2)  &
+    plot_annotation(
+      caption =  CAPTION
+  ) & 
+    theme(
+      plot.caption=element_text(hjust=0, color="grey40", size=11)
+    )
+
+```
+
+```{r, fig.width = 12, fig.asp = 0.6}
+#| label: fig-marketbylocyear
+#| echo: false
+#| warning: false
+#| fig-cap: "The market for loans by motivation for borrowing, 2019 and 2021"
+
+# Indicators used in this figure
+indicators <- c("ind_totalborrowed_pastyear_bylender")
+groups <- c("lender_agg1_str" = "Lender")
+#slicevar <- c("Main reason for borrowing" = "loan_reason_agg_str")
+slicevar <- c("Household location" = "hh_geo2_fct")
+facetvar <- c("indicator_name")
+
+plot_text <- list(
+  subtitle = "Total yearly value of loans disbursed by lender (KSh bilions)",
+  title = "Figure 10A",
+  caption = NULL
+) 
+
+plot_label <- list(
+  type = "valueonly", 
+  threshold = c("ind_totalborrowed_pastyear_bylender" = 30e9, "ind_nloans_pastyear_bylender" = 1.75e6), 
+  hjust =  c("ind_totalborrowed_pastyear_bylender" = -0.2, "ind_nloans_pastyear_bylender" = -0.2),  
+  vjust =  c("ind_totalborrowed_pastyear_bylender" = 0.5, "ind_nloans_pastyear_bylender" = 0.5),  
+  ymax = 900e9
+)
+
+p1 <- fig_bar_loans_by_slice_year_v2(loans_data_pool, indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width = 0.7, flip_coords = TRUE, show_legend = FALSE, legend_pos = "bottom")  + theme(strip.text.y.left = element_blank())
+
+# Indicators used in this figure
+indicators <- c("ind_nloans_pastyear_bylender")
+
+plot_text <- list(
+  subtitle = "Total yearly volume of loans disbursed by lender (millions)",
+  title = "Figure 10B",
+  caption = NULL
+) 
+
+plot_label[["ymax"]] <- 70e6
+
+p2 <- fig_bar_loans_by_slice_year_v2(loans_data_pool, indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width = 0.7, flip_coords = TRUE, show_legend = TRUE, legend_pos = "bottom")  + theme(strip.text.y.left = element_blank())
+
+(p1 / p2)  &
+    plot_annotation(
+      caption =  CAPTION
+  ) & 
+    theme(
+      plot.caption=element_text(hjust=0, color="grey40", size=11)
+    )
 
 ```
 
 ## 2. How prevalent are different forms of borrowing among adults?
 
-In 2021, 56% of Kenyan adults were either currently borrowing or had attempted to borrow in the past year, with similar proportions for both men and women  (@fig-borrprevbytype). Two-thirds of these borrowers used informal options such as social networks, chamas, private moneylenders, employers, or buyers to address their credit needs.  Forty percent of this demand was satisfied by digital options, such as mobile banking, apps or Fuliza and 16 percent was met by traditional (non-digital) loans originating from financial institutions (commercial banks, SACCOs or MFIs). Between 2019 and 2021, the prevalence of bororwing increased from 52 to 56 percent, with digital lending sources driving this growing demand for borrowing.
+In 2021, 56% of Kenyan adults were either currently borrowing or had attempted to borrow in the past year, with similar proportions for both men and women  (@fig-borrprevbytype). Two-thirds of these borrowers used informal options such as social networks, chamas, private moneylenders, employers, or buyers to address their credit needs.  Forty percent of this demand was satisfied by digital options, such as mobile banking, apps or Fuliza and 16 percent was met by traditional (non-digital) loans originating from financial institutions (commercial banks, SACCOs or MFIs). Men are over 30 percent more likely than women to borrow from formal financial institutions or use digital loans, but women are 26 percent more likely than men to use informal credit sources. Between 2019 and 2021, the prevalence of bororwing increased from 52 to 56 percent, with digital lending sources driving this growing demand for borrowing. Borrowing prevalence increased primarily in the lower threee quintiles of the income distribution, and the prevalence of borrowing from digital sources increased across the income distribution (@borrprevbytype_gender_income).
 
 Fuliza (M-Pesa's mobile money overdraft service) saw a notable penetration into the credit market, with 18% of adults using it in 2021 (@fig-borrprevbylender). While the share of adults using loans from mobile banking services remained stable (9%), the share of adults borrowing from digital lending apps fell from 7% to 2% between 2019 and 2021. The share of adults borrowing from their social networks doubled from 8% to 16%. Overall, however, shopkeeper credit (including both cash loans and purchase of goods on credit) remained the most prevalent form of borrowing (30% of adults used shopkeeper credit in 2021). 
 
@@ -554,8 +654,8 @@ groups <- c("fullsample" = "All adults",  "resp_gender_fct" = "Gender")
 slicevar <- c("Year" = "year_fct")
  
 plot_text <- list(
-  title = "Figure 15",
-  subtitle = "Just over half of adults over the age of 18 were using a loan at the time of the 2021 survey or had attempted to borrow in the year prior. Two thirds of these borrowers had their demand for credit satisfied by informal options.",
+  title = "Figure 11",
+  subtitle = "Prevalence of borrowing by source of loan and gender, 2019 and 2021",
   yaxis = NULL, 
   xaxis = "% of adults (18+)", 
   caption = CAPTION
@@ -566,10 +666,10 @@ fig_bar_borrowers_by_type(borrower_data_pool, indicators, slicevar, groups, plot
 ```
 
 ```{r, fig.width = 12, fig.asp = 0.6}
-#| label: fig-borrprevbytype_gender
+#| label: fig-borrprevbytype_gender_income
 #| echo: false
 #| warning: false
-#| fig-cap: "Prevalence of borrowing by source of loan and gender, 2019 and 2021"
+#| fig-cap: "Prevalence of borrowing by source of loan, gender and household wealth quintile, 2019 and 2021"
 
 # Indicators used in this figure
 indicators <- c("borrower_any_status", "lender_agg0_1", "lender_agg0_2", "lender_agg0_3")
@@ -577,14 +677,14 @@ groups <- c("resp_income_quintile" = "Personal monthly income")
 slicevar <- c("Gender" = "resp_gender_fct")
  
 plot_text <- list(
-  title = "Figure 16",
-  subtitle = ".",
+  title = "Figure 12",
+  subtitle = "Prevalence of borrowing by source of loan, gender and household wealth quintile",
   yaxis = NULL, 
   xaxis = "Personal monthly income (quintile)", 
   caption = CAPTION
 ) 
 
-fig_bar_borrowers_by_type_inc_bd(borrower_data_pool, indicators, slicevar, groups, plot_text)
+fig_bar_borrowers_by_type_inc_bd(borrower_data_pool, indicators, slicevar, groups, plot_text) + theme(strip.text.x = element_text(face = "plain"), strip.text.y.left = element_text(face = "bold", angle = 0), strip.placement = "outside", axis.text = element_text(face = "plain"))
 
 ```
 
@@ -601,14 +701,14 @@ groups <- c("fullsample" = "All adults",  "resp_gender_fct" = "Gender")
 slicevar <- c("Year" = "year_fct")
  
 plot_text <- list(
-  title = "Figure 17",
+  title = "Figure 13",
   subtitle = "Types of loans currently used by adults",
   yaxis = NULL, 
   xaxis = "% of adults (18+)", 
   caption = CAPTION
 ) 
 
-fig_bar_loansused_by_source(borrower_data_pool, indicators, slicevar, groups, plot_text)
+fig_bar_loansused_by_source(borrower_data_pool, indicators, slicevar, groups, plot_text) + theme(strip.text.x = element_text(face = "bold"))
 
 ```
 
@@ -625,7 +725,7 @@ indicators <- c("borrower_me_formal", "borrower_me_digital", "borrower_me_inform
 groups <- c("fullsample" = "All adults", "resp_gender_fct" = "Gender", "resp_age_group2_fct" = "Age group", "hh_geo2_fct" = "HH residence", "hh_wlth_group" = "HH wealth")
   
 plot_text <- list(
-  title = "Figure 18",
+  title = "Figure 14",
   subtitle = "In 2021, the most common type of borrower had a loan portfolio comprised exclusively of informal loans.",
   xaxis = NULL,
   yaxis = "% of borrowers by most formal loan currently in use",
@@ -636,34 +736,10 @@ fig_bar_borrowers_by_portfolio(borrower_data, indicators, groups, plot_text)
 
 ```
 
-In 2021, users of Fuliza borrowed an average of 7.2 times per year, significantly more frequently than borrowers from other lenders (@fig-nloanspyear). Loans from social networks were the second most frequently used source, with an average of 3.4 loans per year, followed by mobile banking (2 loans), and Chama groups (1.9 loans). Other sources, such as fintech apps, private moneylenders, employers or buyers, and SACCOs/MFIs, averaged between 1.1 to 1.6 loans per year. This data underscores the high reliance on Fuliza for frequent, short-term credit needs. 
-
-```{r, fig.width = 12, fig.asp = 0.5}
-#| label: fig-nloanspyear
-#| echo: false
-#| warning: false
-#| fig-cap: "Average number of loans taken per year among borrowers, 2021"
-
-# Indicators used in this figure
-indicators <- c("ind_nloans_pastyear_bylender")
-groups <- c("lender_agg3_str" = "Lender")
-  
-plot_text <- list(
-  title = "Figure 19",
-   subtitle = "Users of Fuliza borrowed every 1 to 2 months on average in 2021, far more frequently than users of other lenders",
-  yaxis = NULL,
-  xaxis = "Average number of loans taken in past year",
-  caption =  paste(CAPTION, " Notes: This figure only considers cash loans therefore it excludes credit card usage and pruchases of goods from shopkeepers on credit.")
-) 
-
-fig_bar_borrowing_freq_by_lender(loans_data, indicators, groups, plot_text)
-
-```
 
 ## 3. Why do adults borrow? 
 
 In both 2019 and 2021, the primary reason for borrowing in Kenya was for basic consumption, with the poorest 40% of the population being the most frequent borrowers for this purpose (69% in 2019 and 62% in 2021) (@fig-reasonsforborrowing). The middle 40% and richest 20% also borrowed significantly for basic consumption, though to a slightly lesser extent. Educational expenses were the second most common reason for borrowing, with an increase between 2019 and 2021 evident among all wealth groups. Borrowing for business or farm investment decreased moderately between 2019 and 2021. 
-
 
 ```{r, fig.width = 12, fig.asp = 0.65}
 #| label: fig-reasonsforborrowing
@@ -677,7 +753,7 @@ groups <- c("hh_wlth_group" = "Household wealth")
 slicevar <- c("Year" = "year_fct")
 
 plot_text <- list(
-  title = "Figure 20",
+  title = "Figure 16",
   subtitle = "Distribution of loans by main reason for taking loan",
   yaxis = "",
   xaxis = "% of loans",
@@ -685,7 +761,7 @@ plot_text <- list(
 ) 
 
 pal <- c(PALETTES[[names(groups[1])]], PALETTES[[names(groups[2])]])
-fig_bar_loan_reasons(loans_data_pool, indicators, slicevar, groups, plot_text, palette = pal)
+fig_bar_loan_reasons(loans_data_pool, indicators, slicevar, groups, plot_text, palette = pal) + theme(strip.text.x = element_text(face = "bold"))
 
 ```
 
@@ -701,7 +777,7 @@ groups <- c("hh_wlth_group" = "Household wealth")
 slicevar <- c("Gender" = "resp_gender_fct")
 
 plot_text <- list(
-  title = "Figure 21",
+  title = "Figure 17",
   subtitle = "Distribution of loans by main reason for taking loan",
   yaxis = "",
   xaxis = "% of loans",
@@ -709,7 +785,7 @@ plot_text <- list(
 ) 
 
 pal <- c(PALETTES[[names(groups[1])]], PALETTES[[names(groups[2])]])
-fig_bar_loan_reasons(loans_data, indicators, slicevar, groups, plot_text, palette = pal)
+fig_bar_loan_reasons(loans_data, indicators, slicevar, groups, plot_text, palette = pal) + theme(strip.text.x = element_text(face = "bold"))
 
 ```
 
@@ -727,7 +803,7 @@ In 2021, borrowers in Kenya cited convenience and ease of obtaining a loan as th
 indicators_left <- c("mimp_loan_agg3_")
 groups_left <- c("fullsample" = "All borrowers")
 plot_text_left <- list(
-  title = "Figure 14A",
+  title = "Figure 18A",
   subtitle  = "Most important loan\n(% of borrowers)",
   caption =  NULL
 ) 
@@ -736,7 +812,7 @@ plot_text_left <- list(
 indicators_right <- c("mimp_reason_1", "mimp_reason_2", "mimp_reason_3", "mimp_reason_4", "mimp_reason_5", "mimp_reason_6", "mimp_reason_7", "mimp_reason_8")
 groups_right <- c("mimp_loan_agg3_str" = "Most important loan")
 plot_text_right <- list(
-  title =  "Figure 22",
+  title =  "Figure 18B",
   subtitle = "Reason loan is the most important\n(% of borrowers of lender, row adds to 100%)",
   caption = NULL
 ) 
@@ -747,8 +823,7 @@ fig_comp_borrower_by_mostimplloan(borrower_data, indicators_left, groups_left, i
 
 ## 4. How many adults have difficulty repaying debt and why?
 
-Between 2019 and 2021, the median loan size among borrowers increased from KSh 3,500 to KSh 4,000 and the percentage of adults with some outstanding debt rose from 40.6% to 49.5%. However, the median outstanding debt declined from KSh 2,700 in 2019 to KSh 2,000 in 2019, consistent with substantial rise in shorter-term loans, in particular Fuliza and shopkeeper credit. Total outstanding debt as a share of personal monthly income among borrowers remained at around 40% in 2019 and 2021 (@fig-debtstatus).
-
+Between 2019 and 2021, the percentage of adults with some outstanding debt rose from 40.6% to 49.5% and the median outstanding debt rose from KSh 800 in 2019 to KSh 1,800 in 2021. Total outstanding debt as a share of personal monthly income among borrowers rose from 15% in 2019 to 32% in 2021 (@fig-debtstatus).
 
 ```{r, fig.width = 12, fig.asp = 0.75}
 #| label: fig-debtstatus
@@ -763,14 +838,14 @@ Between 2019 and 2021, the median loan size among borrowers increased from KSh 3
   notes <- c("*Delinquent payment is not comparable across 2019 and 2021. In 2019, respondents were asked to report whether they had 'defaulted' on a loan by lender, whereas in 2021, respondents were asked to report whether they had 'paid late, missed a payment, paid less or never paid' by lender.")
     
   plot_text <- list(
-  title = "Figure 23",
+  title = "Figure 19",
   subtitle = "Borrowing and debt status by lender, 2019 and 2021",
   yaxis = NULL, 
   xaxis = NULL,  
   caption = str_wrap(paste0(CAPTION, notes), 120)
 ) 
   
-  fig_tile_debt_overview(respdebt_data_pool, borrower_data_pool, indicators, slicevar, groups, plot_text)
+  fig_tile_debt_overview(respdebt_data_pool, borrower_data_pool, indicators, slicevar, groups, plot_text) + theme(strip.text.x = element_text(face = "bold")) + geom_hline(yintercept = 13.5, color = "black", size = 0.75)
 
 ```
 
@@ -788,8 +863,8 @@ In 2021, "Using up all my money for basic needs" (46%) and "Did not plan well en
 #| fig-cap: "Prevalence of debt stress and reasons for loan defaults and delinquency, 2019 and 2021"
 
 plot_text <- list(
-  title1 = "Figure 24A",
-  title2 = "Figure 24B"
+  title1 = "Figure 20A",
+  title2 = "Figure 20B"
 ) 
 
 slicevar <- c("Year" = "year_fct")

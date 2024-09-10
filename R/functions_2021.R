@@ -1046,7 +1046,8 @@ prep_borrower_data_2021 <- function(data) {
         E2E %in% c(2) ~ 2, # Interest rates / repayment rates went up
         E2E %in% c(3,9) ~ 3, # Did not understand terms, payment more than expected
         E2E %in% c(4, 7, 8) ~ 4, # Poor business performance, lost income source
-        E2E %in% c(5, 6) ~ E2E,
+        E2E %in% c(5) ~ 5,
+        E2E %in% c(6) ~ 6,
         E2E %in% c(10) ~ 7, # Unexpected emergency
         E2E %in% c(11, 12, 14) ~ 8, # Other
         E2E %in% c(98, 99) ~ NA,
@@ -1196,7 +1197,10 @@ prep_loans_data_2021 <- function(data, borrower_data) {
 
   loans <- loans %>%
     filter_at(vars(contains("loan")), any_vars(!is.na(.)))
-
+  
+  social <- loans %>% filter(lender %in% c("F", "I", "J")) %>% mutate(nloans_pastyear > 100, 100, nloans_pastyear)
+  imputed_value = median(social$nloans_pastyear, na.rm = TRUE)
+  
   loans <- loans %>%
     mutate(
       #nloans_pastyear = ifelse(nloans_outstanding >0 & nloans_pastyear == 0, nloans_outstanding, nloans_pastyear),
@@ -1209,7 +1213,9 @@ prep_loans_data_2021 <- function(data, borrower_data) {
       #nloans_pastyear_mod = ifelse(!is.na(loan_reason_det) & is.na(nloans_pastyear), 1, nloans_pastyear_mod),
       nloans_pastyear_mod = ifelse(!is.na(loan_principal) & nloans_pastyear == 0, 1, nloans_pastyear),
       #nloans_pastyear_mod = ifelse(!is.na(nloans_outstanding) & is.na(nloans_pastyear), nloans_outstanding, nloans_pastyear_mod),
-      nloans_pastyear_mod = ifelse(!is.na(nloans_outstanding) & nloans_pastyear_mod == 0, nloans_outstanding, nloans_pastyear_mod),
+      nloans_pastyear_mod = ifelse(!is.na(nloans_outstanding) & (nloans_pastyear_mod == 0 | is.na(nloans_pastyear_mod)), nloans_outstanding, nloans_pastyear_mod),
+      nloans_pastyear_mod = ifelse(is.na(nloans_pastyear_mod) & lender ==  "K", imputed_value, nloans_pastyear_mod), 
+      nloans_pastyear_mod = ifelse(is.na(nloans_pastyear_mod) & !is.na(loan_principal), 1, nloans_pastyear_mod),
       #nloans_pastyear_mod = ifelse(is.na(nloans_pastyear_mod), 1, nloans_pastyear_mod),
 
       # THere are loan types (primarily Fuliza) that are reported having been taken more than 100 times in the past year, setting a ceiling on these.

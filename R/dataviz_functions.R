@@ -1,5 +1,5 @@
 
-TITLE_WRAP <- 110
+TITLE_WRAP <- 40
 CAP_WRAP <- 120
 
 
@@ -141,7 +141,7 @@ fig_tree_loans_by_value <- function(data, indicators, groups, plot_text) {
 }
 
 # Volume/Value of loans by lender by year  --------------
-fig_bar_loans_by_slice <- function(data, indicators, slicevar, groups, plot_text, plot_label) {
+fig_bar_loans_by_slice <- function(data, indicators, slicevar, facetvar = NULL, groups, plot_text, plot_label, bar_width = 0.5, flip_coords = FALSE, show_legend = TRUE, legend_pos = "right", reverse_legend = TRUE) {
 
   lendervar <- sym(names(groups))
   slicevar <- sym(slicevar)
@@ -170,31 +170,33 @@ fig_bar_loans_by_slice <- function(data, indicators, slicevar, groups, plot_text
          strata = NULL,
          w = "probweights")
   )
-
+  
   levels_lender <- names(PALETTES[[names(groups)]])
-
-  if (indicators == "ind_nloans_pastyear_bylender") {
-    denom = 1e6
-    suffix = "m"
-  }
-
-  if (indicators == "ind_totalborrowed_pastyear_bylender") {
-    denom = 1e9
-    suffix = "b"
-  }
-
+  
+  if (!is.null(facetvar)) { 
+    facetvar <- sym(facetvar)
+    chart_df <- results %>%
+      filter(!!slicevar != "Other") %>% 
+      group_by(!!slicevar, !!facetvar) 
+    } else {
   chart_df <- results %>%
     filter(!!slicevar != "Other") %>% 
-    group_by(!!slicevar) %>%
+    group_by(!!slicevar) 
+  } 
+    
+    chart_df <- chart_df %>%
     mutate(
-      label_sig = formatC(signif(total/denom, digits=3), digits=3, format="fg", flag="#"),
-      group_cat_val = factor(group_cat_val, levels = levels_lender, ordered = TRUE),
+      denom = ifelse(indicator == "ind_nloans_pastyear_bylender", 1e6, NA), 
+      denom = ifelse(indicator == "ind_totalborrowed_pastyear_bylender", 1e9, denom), 
+      suffix = "", 
+      label_sig = formatC(signif(total/denom, digits=3), digits=2, format="fg", drop0trailing = FALSE),
+      group_cat_val = fct_rev(factor(group_cat_val, levels = levels_lender, ordered = TRUE)),
       grand_total = sum(total),
       share = total/grand_total,
       label_total = paste0(prettyNum(round(grand_total/denom, 1), big.mark = ","), suffix),
       label_total = ifelse(group_cat_val == "Bank", label_total, NA)
-    )
-
+    ) %>% ungroup()
+  
   if (plot_label[["type"]] == "both") {
     chart_df <- chart_df %>% mutate(
       valuelab = str_wrap(paste0(label_sig, suffix, " (", round(share*100, 0), "%)"), 10),
@@ -204,85 +206,304 @@ fig_bar_loans_by_slice <- function(data, indicators, slicevar, groups, plot_text
 
   if (plot_label[["type"]] == "valueonly") {
     chart_df <- chart_df %>% mutate(
-      valuelab = paste0(label_sig, suffix),
-      valuelab = ifelse(total < plot_label[["threshold"]], NA, valuelab)
+      valuelab = paste0(label_sig, suffix)
     )
   }
 
   if (plot_label[["type"]] == "shareonly") {
     chart_df <- chart_df %>% mutate(
-      valuelab = paste0(round(share*100, 0), "%)"),
-      valuelab = ifelse(total < plot_label[["threshold"]], NA, valuelab)
+      valuelab = paste0(round(share*100, 0), "%)")
     )
   }
 
-  #png(file ="figures/fig6.png",width = 11, height = 7, units = c("in"), res = 300)
+  if (plot_label[["type"]] == "none") {
+      chart_df <- chart_df %>% mutate(
+        valuelab = NA
+      )
+    }
+    
+    chart_df <- chart_df %>% 
+      mutate(
+        threshold = plot_label[["threshold"]][indicator], 
+        hjust = plot_label[["hjust"]][indicator], 
+        vjust = plot_label[["vjust"]][indicator], 
+        valuelab = ifelse(total < threshold, NA, valuelab), 
+        valuelab = str_squish(valuelab),
+        !!slicevar := fct_inorder(str_wrap(!!slicevar, 40))
+      )
 
-  ggplot(
+  if (flip_coords == TRUE) { 
+    chart_df <- chart_df %>% mutate(!!slicevar := fct_rev(!!slicevar))
+  }
+    
+  p <- ggplot(
     data = chart_df,
     aes(
-      x = str_wrap(!!slicevar, 12),
+      x = !!slicevar,
       y = total,
       fill = group_cat_val
     )
-  ) +
-    geom_col(width = 0.5) +
-    geom_text(aes(y = grand_total, label = label_total), vjust = 0, nudge_y = plot_label[["nudge_y"]], fontface = "bold") +
+  ) 
+  
+  if (!is.null(facetvar)) { 
+    p <- p + facet_wrap(vars(!!facetvar), ncol = 1, scales = "free") + theme(strip.placement = "outside", strip.text.y.left = element_text(angle = 0))
+  }
+  
+  p <- p + 
+    geom_col(width = bar_width) +
+    geom_text(aes(y = grand_total, label = label_total, hjust = hjust, vjust = vjust), fontface = "bold") +
+    # geom_text(aes(y = grand_total, label = label_total), vjust = plot_label[["vjust"]], hjust = plot_label[["hjust"]], nudge_y = plot_label[["nudge_y"]], fontface = "bold") +
     geom_text(aes(label = valuelab), position = position_stack(vjust = 0.5)) +
-    scale_y_continuous(labels = scales::label_number(big.mark = ",")) +
+    
+    scale_y_continuous(labels = scales::label_comma()) +
     scale_fill_manual(values = PALETTES[[names(groups)]]) +
-    guides(fill = guide_legend(title = NULL)) +
+    
+    guides(fill = guide_legend(title = NULL, reverse = reverse_legend)) +
+    
     labs(
       x = plot_text[["xaxis"]],
       y = plot_text[["yaxis"]],
       title = str_wrap(plot_text[["title"]], TITLE_WRAP),
       subtitle = str_wrap(plot_text[["subtitle"]], TITLE_WRAP),
       caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
-    ) +
-    theme_custom() +
-    theme(axis.line.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank())
+    ) + 
+    
+    theme_custom(scale_f = 1.2) 
 
-  #dev.off()
-
+  
+  if (flip_coords) { 
+    p <- p + coord_flip() + 
+      theme(axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+  } else { 
+    p <- p + 
+    theme(axis.line.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank()) 
+    }
+  
+  if (show_legend == TRUE) { 
+    p <- p + theme(legend.position = legend_pos)
+  } else { 
+    p <- p + theme(legend.position = "none")
+    }
+  
+return(p)
+  
 }
 
-# Function to create conmposite comparing across household wealth quintiles
-fig_bar_loans_by_slice_year <- function(data, indicators, slicevar, groups, main_plot_text, plot_label) {
+fig_bar_loans_by_slice_year_v2 <- function(data, indicators, slicevar, facetvar = NULL, groups, plot_text, plot_label, bar_width = 0.5, flip_coords = FALSE, show_legend = TRUE, legend_pos = "right", reverse_legend = TRUE, legend_rows = 1) {
+  
+  lendervar <- sym(names(groups))
+  slicevar <- sym(slicevar)
+  
+  data <- data %>%
+    group_by(year, !!slicevar, mem_id, !!lendervar) %>%
+    mutate(ind_nloans_pastyear_bylender = sum(nloans_pastyear_mod, na.rm = T),
+           ind_totalborrowed_pastyear_bylender = sum(total_borrowed, na.rm = T)
+    ) %>%
+    filter(row_number() == 1) %>%
+    ungroup()
+  
+  combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
+  is <- combinations[[1]]
+  gs <- combinations[[2]]
+  
+  results_19 <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(year == 2019),
+         g_l1 = as_string(slicevar),
+         iref = INDICATORS_REFLIST_LVL_LOAN,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(year = "2019")
+  
+  results_21 <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data %>% filter(year == 2021),
+         g_l1 = as_string(slicevar),
+         iref = INDICATORS_REFLIST_LVL_LOAN,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) %>% mutate(year = "2021")
+  
+  results <- bind_rows(results_19, results_21)
+  
+  levels_lender <- names(PALETTES[[names(groups)]])
+  
+  if (!is.null(facetvar)) { 
+    facetvar <- sym(facetvar)
+    chart_df <- results %>%
+      filter(!!slicevar != "Other") %>% 
+      group_by(year, !!slicevar, !!facetvar) 
+  } else {
+    chart_df <- results %>%
+      filter(!!slicevar != "Other") %>% 
+      group_by(year, !!slicevar) 
+  } 
+  
+  chart_df <- chart_df %>%
+    mutate(
+      denom = ifelse(indicator == "ind_nloans_pastyear_bylender", 1e6, NA), 
+      denom = ifelse(indicator == "ind_totalborrowed_pastyear_bylender", 1e9, denom), 
+      suffix = "", 
+      label_sig = formatC(signif(total/denom, digits=3), digits=2, format="fg", drop0trailing = FALSE),
+      group_cat_val = fct_rev(factor(group_cat_val, levels = levels_lender, ordered = TRUE)),
+      grand_total = sum(total),
+      share = total/grand_total,
+      label_total = paste0(prettyNum(round(grand_total/denom, 1), big.mark = ","), suffix),
+      label_total = ifelse(group_cat_val == "Bank", label_total, NA)
+    ) %>% ungroup()
+  
+  if (plot_label[["type"]] == "both") {
+    chart_df <- chart_df %>% mutate(
+      valuelab = str_wrap(paste0(label_sig, suffix, " (", round(share*100, 0), "%)"), 10),
+      valuelab = ifelse(total < plot_label[["threshold"]], NA, valuelab)
+    )
+  }
+  
+  if (plot_label[["type"]] == "valueonly") {
+    chart_df <- chart_df %>% mutate(
+      valuelab = paste0(label_sig, suffix)
+    )
+  }
+  
+  if (plot_label[["type"]] == "shareonly") {
+    chart_df <- chart_df %>% mutate(
+      valuelab = paste0(round(share*100, 0), "%)")
+    )
+  }
+  
+  if (plot_label[["type"]] == "none") {
+    chart_df <- chart_df %>% mutate(
+      valuelab = NA
+    )
+  }
+  
+  chart_df <- chart_df %>% 
+    mutate(
+      threshold = plot_label[["threshold"]][indicator], 
+      hjust = plot_label[["hjust"]][indicator], 
+      vjust = plot_label[["vjust"]][indicator], 
+      valuelab = ifelse(total < threshold, NA, valuelab), 
+      valuelab = str_squish(valuelab),
+      !!slicevar := fct_inorder(str_wrap(!!slicevar, 40))
+    )
+  
+  if (flip_coords == TRUE) { 
+    chart_df <- chart_df %>% mutate(!!slicevar := fct_rev(!!slicevar))
+  }
 
+  p <- ggplot(
+    data = chart_df,
+    aes(
+      x = !!slicevar,
+      y = total,
+      fill = group_cat_val
+    )
+  ) 
+  
+  if (!is.null(facetvar)) { 
+    p <- p + 
+      facet_grid(rows = vars(!!facetvar), cols = vars(year), scales = "free", space = "free", switch = "y") 
+  }
+  
+  p <- p + 
+    geom_col(width = bar_width) +
+    geom_text(aes(y = grand_total, label = label_total, hjust = hjust, vjust = vjust), fontface = "bold") +
+    # geom_text(aes(y = grand_total, label = label_total), vjust = plot_label[["vjust"]], hjust = plot_label[["hjust"]], nudge_y = plot_label[["nudge_y"]], fontface = "bold") +
+    geom_text(aes(label = valuelab), position = position_stack(vjust = 0.5)) +
+    
+    scale_y_continuous(limits = c(0, plot_label[["ymax"]]), labels = scales::label_comma()) +
+    scale_fill_manual(values = PALETTES[[names(groups)]]) +
+    
+    guides(fill = guide_legend(title = NULL, reverse = reverse_legend, nrow = legend_rows)) +
+    
+    labs(
+      x = plot_text[["xaxis"]],
+      y = plot_text[["yaxis"]],
+      title = str_wrap(plot_text[["title"]], TITLE_WRAP),
+      subtitle = str_wrap(plot_text[["subtitle"]], TITLE_WRAP),
+      caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
+    ) + 
+    
+    theme_custom(scale_f = 1.2) + theme(strip.placement = "outside", strip.text.y.left = element_text(angle = 0))
+  
+  
+  if (flip_coords) { 
+    p <- p + coord_flip() + 
+      theme(axis.line.x = element_blank(), axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
+  } else { 
+    p <- p + 
+      theme(axis.line.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank()) 
+  }
+  
+  if (show_legend == TRUE) { 
+    p <- p + theme(legend.position = legend_pos)
+  } else { 
+    p <- p + theme(legend.position = "none")
+  }
+  
+  return(p)
+  
+}
+
+
+# Function to create conmposite comparing across household wealth quintiles
+fig_bar_loans_by_slice_year <- function(data, indicators, slicevar, facetvar = NULL, groups, main_plot_text, plot_label, bar_width = 0.5, flip_coords = FALSE, show_legend = TRUE, legend_pos = "right", collect_guides = TRUE, collect_axes = TRUE) {
+  
   plot_text <- list(
     subtitle = "2019",
     title = NULL,
     caption = NULL
   )
-  p1 <- fig_bar_loans_by_slice(data %>% filter(year == 2019), indicators, slicevar, groups, plot_text, plot_label)
+  p1 <- fig_bar_loans_by_slice(data %>% filter(year == 2019), indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width, flip_coords, show_legend, legend_pos)
 
   plot_text <- list(
     subtitle = "2021",
     title = NULL,
     caption = NULL
   )
-  p2 <- fig_bar_loans_by_slice(data %>% filter(year == 2021), indicators, slicevar, groups, plot_text, plot_label)
+  p2 <- fig_bar_loans_by_slice(data %>% filter(year == 2021), indicators, slicevar, facetvar, groups, plot_text, plot_label, bar_width, flip_coords, show_legend, legend_pos)
 
   scale_f <- 1.2
 
-  p1 + p2 +
-    plot_layout(guides = 'collect') +
+  p <- p1 + p2
+  
+ if (collect_guides) {
+  p <-  p + plot_layout(guides = 'collect')
+ } 
+ if (collect_axes) {
+   p <- p + plot_layout(axes = 'collect') 
+  }
+  
+  p <- p + 
     plot_annotation(
     title = main_plot_text[["title"]],
     subtitle = main_plot_text[["subtitle"]],
     caption =  main_plot_text[["caption"]]
   ) &
-    ylim(0, plot_label[["ymax"]]) &
     theme(
       plot.subtitle = element_text(size = 12*scale_f, face = 'bold'),
       plot.title = element_text(size = 11.5*scale_f, hjust = 0, face = 'bold', color = '#0496FF'),
       plot.caption=element_text(hjust=0, color="grey40", size=10.5*scale_f)
     )
 
+   if (!is.null(plot_label[["ymax"]])) { 
+     p <- p & ylim(0, plot_label[["ymax"]]) 
+   }
+     
+   return(p)
+   
 }
 
 # Volume of loans by size and source of loan
-fig_bar_loans_by_size_and_source <- function(data, indicators, slicevar, groups, plot_text, outfilename = FALSE) {
+fig_bar_loans_by_size_and_source <- function(data, indicators, slicevar, groups, plot_text, outfilename = FALSE, reverse_legend = FALSE) {
 
   indicators <- names(INDICATORS_REFLIST_LVL_LOAN[str_detect(names(INDICATORS_REFLIST_LVL_LOAN), paste(indicators, collapse = '|'))])
   combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
@@ -312,12 +533,18 @@ fig_bar_loans_by_size_and_source <- function(data, indicators, slicevar, groups,
   chart_df <- results %>%
     group_by(!!slicevar) %>%
     mutate(
-      group_cat_val = factor(group_cat_val, levels = levels_group, ordered = TRUE),
+      group_cat_val = fct_rev(factor(group_cat_val, levels = levels_group, ordered = TRUE)),
       n_loans_total = sum(total),
       n_loans_share = total/n_loans_total,
       indicator_name = factor(str_wrap(indicator_name, 15), levels = str_wrap(levels_indicator, 15), ordered = TRUE),
-      value_label = pctclean(n_loans_share, 1),
+      value_label = pctclean(n_loans_share, 0),
       value_label = ifelse(n_loans_share < 0.01, NA, value_label)
+    ) %>% 
+    group_by(!!slicevar, indicator_name) %>% 
+    mutate(
+      grand_total = sum(n_loans_share),
+      label_total = pctclean(grand_total,0),
+      label_total = ifelse(row_number() == 1, label_total, NA)
     )
 
   p <- ggplot(
@@ -329,10 +556,13 @@ fig_bar_loans_by_size_and_source <- function(data, indicators, slicevar, groups,
     )
   ) +
     facet_wrap(vars(!!slicevar), nrow = 1) +
-    geom_col(position = position_stack()) +
+    geom_col(width = 0.7, position = position_stack()) +
+    
+    geom_text(aes(y = grand_total, label = label_total, hjust = 0.5, vjust = -0.4), fontface = "bold") +
+    
     geom_text(aes(label = value_label), position = position_stack(vjust = 0.5)) +
 
-    guides(fill = guide_legend(title = NULL)) +
+    guides(fill = guide_legend(title = NULL, reverse = reverse_legend)) +
 
     scale_fill_manual(values = PALETTES[[names(groups)]]) +
     scale_y_continuous(labels = scales::label_percent(), limits = c(0, 0.65)) +
@@ -356,7 +586,9 @@ fig_bar_loans_by_size_and_source <- function(data, indicators, slicevar, groups,
 
   }
 
-fig_bar_loansize_by_lender <- function(data, indicators, slicevar, groups, plot_text, outfilename = FALSE) {
+fig_bar_loansize_by_lender <- function(data, indicators, slicevar, groups, plot_text, value = "mean", outfilename = FALSE, group_cat_levels) {
+  
+  value <- sym(value) 
   
   combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
   is <- combinations[[1]]
@@ -375,21 +607,29 @@ fig_bar_loansize_by_lender <- function(data, indicators, slicevar, groups, plot_
          w = "probweights")
   ) 
   
-  chart_df <- results %>% mutate(valuelabel =  as.character(prettyNum(round(median, 1), big.mark = ",")))
+  chart_df <- results %>% 
+    mutate(
+      valuelabel =  as.character(prettyNum(round(!!value, 0), big.mark = ",")), 
+      group_cat_val = fct_rev(factor(group_cat_val, group_cat_levels, ordered = TRUE))
+    )
+  
+  max_x = max(pull(chart_df, !!value))
+  buffer = max_x/5
   
   p <- ggplot(
     data = chart_df,
     aes(
-      x = median,
-      y = fct_rev(fct_inorder(group_cat_val)), 
+      x = !!value,
+      y = group_cat_val,
       color = year_fct
     )
   ) +
-    geom_linerange(aes(xmin = 0, xmax = median), size = 1.75, position = position_dodge(width = 0.55)) +
-    geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white",  position = position_dodge(width = 0.55)) +
-    geom_text(aes(x = median + 2e3, label = valuelabel), hjust = 0, position = position_dodge2(width = 0.55, reverse = TRUE), color = "black") +
-    scale_color_manual(values = c("2019" = "black", "2021" = "#0496FF")) +
-    scale_x_continuous(limits = c(0, 1.6e5), breaks = c(5000, 25000, 50000, 75000, 100000, 125000, 150000), labels = scales::label_number(big.mark = ",")) + 
+    geom_linerange(aes(xmin = 0, xmax = !!value), size = 1.55, position = position_dodge(width = 0.6)) +
+    geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white",  position = position_dodge(width = 0.6)) +
+    geom_text(aes(x = !!value + 2e3, label = valuelabel), hjust = -0.3, position = position_dodge2(width = 0.6, reverse = TRUE), color = "black", size = 3) +
+    geom_point(aes(x = median, color = year_fct), shape = 18, size = 2.5, color = "red",  position = position_dodge2(width = 0.6, reverse = TRUE)) +
+    scale_color_manual(values = c("2019" = "grey70", "2021" = "#0496FF")) +
+    scale_x_continuous(limits = c(0, max_x + buffer), labels = scales::label_comma()) + 
     guides(color = guide_legend(title = NULL)) + 
     labs(
       y = plot_text[["yaxis"]],
@@ -410,6 +650,131 @@ fig_bar_loansize_by_lender <- function(data, indicators, slicevar, groups, plot_
   
 }
 
+fig_bar_loanfreq_by_lender <- function(data, indicators, slicevar, groups, plot_text, value = "mean", outfilename = FALSE, group_cat_levels) {
+  
+  value <- sym(value) 
+  
+  combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
+  is <- combinations[[1]]
+  gs <- combinations[[2]]
+  
+  results <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data,
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_LOAN,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) 
+  
+  chart_df <- results %>% mutate(
+                                valuelabel =  as.character(prettyNum(round(!!value, 1), big.mark = ",")), 
+                                group_cat_val = fct_rev(factor(group_cat_val, group_cat_levels, ordered = TRUE))
+                                 )
+  
+  max_x = max(pull(chart_df, !!value))
+  buffer = max_x/5
+  
+  p <- ggplot(
+    data = chart_df,
+    aes(
+      x = !!value,
+      y = group_cat_val, 
+      color = year_fct
+    )
+  ) +
+    geom_linerange(aes(xmin = 0, xmax = !!value), size = 1.55, position = position_dodge(width = 0.6)) +
+    geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white",  position = position_dodge(width = 0.6)) +
+    geom_text(aes(x = !!value, label = valuelabel), hjust = -0.4, position = position_dodge2(width = 0.6, reverse = TRUE), color = "black", size = 3) +
+    geom_point(aes(x = median, color = year_fct), shape = 18, size = 2.5, color = "red",  position = position_dodge2(width = 0.6, reverse = TRUE)) +
+    scale_color_manual(values = c("2019" = "grey70", "2021" = "#0496FF")) +
+    scale_x_continuous(limits = c(0, max_x + buffer), labels = scales::label_comma()) + 
+    guides(color = guide_legend(title = NULL)) + 
+    labs(
+      y = plot_text[["yaxis"]],
+      x = plot_text[["xaxis"]],
+      title = str_wrap(plot_text[["title"]], 130),
+      subtitle = str_wrap(plot_text[["subtitle"]], 130),
+      caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
+    ) +
+    theme_custom(scale_f = 1.3) +
+    theme(legend.position = "top", legend.direction = "horizontal")
+  
+  if (outfilename) {
+    filename <- paste0("figures/", outfilename, "png")
+    ggsave(filename, plot = p, width = 14, height = 7, dpi = 300)
+  }
+  
+  return(p)
+  
+}
+
+fig_bar_borrowers_by_lender <- function(data, indicators, slicevar, groups, plot_text, value = "mean", outfilename = FALSE, group_cat_levels) {
+  
+  value <- sym(value) 
+  
+  combinations <- expand.grid(indicators, names(groups), stringsAsFactors = FALSE)
+  is <- combinations[[1]]
+  gs <- combinations[[2]]
+  
+  results <- dplyr::bind_rows(
+    map2(is,
+         gs,
+         svy_summary_weights_v2,
+         data = data,
+         g_l1 = slicevar,
+         iref = INDICATORS_REFLIST_LVL_LOAN,
+         gref = groups,
+         psu = "psu",
+         strata = NULL,
+         w = "probweights")
+  ) 
+  
+  chart_df <- results %>% mutate(
+    !!value := !!value/1e6, 
+    valuelabel =  as.character(prettyNum(round(!!value, 1), big.mark = ",")), 
+    group_cat_val = fct_rev(factor(group_cat_val, group_cat_levels, ordered = TRUE))
+    )
+  
+  max_x = max(pull(chart_df, !!value))
+  buffer = max_x/5
+  
+  p <- ggplot(
+    data = chart_df,
+    aes(
+      x = !!value,
+      y = group_cat_val, 
+      color = year_fct
+    )
+  ) +
+    geom_linerange(aes(xmin = 0, xmax = !!value), size = 1.55, position = position_dodge(width = 0.6)) +
+    geom_point(shape = 21, size = 2.5, stroke = 1.75, fill = "white",  position = position_dodge(width = 0.6)) +
+    geom_text(aes(x = !!value, label = valuelabel), hjust = -0.4, position = position_dodge2(width = 0.6, reverse = TRUE), color = "black", size = 3) +
+    scale_color_manual(values = c("2019" = "grey70", "2021" = "#0496FF")) +
+    scale_x_continuous(limits = c(0, max_x + buffer), labels = scales::label_comma()) + 
+    guides(color = guide_legend(title = NULL)) + 
+    labs(
+      y = plot_text[["yaxis"]],
+      x = plot_text[["xaxis"]],
+      title = str_wrap(plot_text[["title"]], 130),
+      subtitle = str_wrap(plot_text[["subtitle"]], 130),
+      caption = str_wrap(plot_text[["caption"]], CAP_WRAP)
+    ) +
+    theme_custom(scale_f = 1.3) +
+    theme(legend.position = "top", legend.direction = "horizontal")
+  
+  if (outfilename) {
+    filename <- paste0("figures/", outfilename, "png")
+    ggsave(filename, plot = p, width = 14, height = 7, dpi = 300)
+  }
+  
+  return(p)
+  
+}
 
 #2. How prevalent are different forms of borrowing among adults? ---------------
 
@@ -520,7 +885,7 @@ fig_bar_borrowers_by_type_inc_bd <- function(data, indicators, slicevar, groups,
   ) +
     facet_grid(cols = vars(str_wrap(indicator_name, 20)), rows = vars(!!slicevar), switch = "y") +
     geom_line(linewidth = 1.2) + 
-    geom_point(shape = 21, size = 0.7, stroke = 0.7, color = "white", fill = "white") +
+    geom_point(shape = 21, size = 1.5, stroke = 1, fill = "white") +
     #geom_text(aes(x = mean, label = pctclean(mean, 0)), hjust = 0, position = position_dodge2(width = 0.35, reverse = TRUE), color = "black") +
     guides(color = guide_legend(title = NULL)) +
     labs(
@@ -534,7 +899,7 @@ fig_bar_borrowers_by_type_inc_bd <- function(data, indicators, slicevar, groups,
     scale_color_manual(values = c("2019" = "#0496FF", "2021" = "#E36588")) +
     scale_y_continuous(labels = scales::label_percent(), limits = c(0, 0.75)) +
     theme_custom(scale_f = 1.3) +
-    theme(legend.position = "top", legend.direction = "horizontal")
+    theme(legend.position = "bottom", legend.direction = "horizontal")
   
   # Loan principal
   

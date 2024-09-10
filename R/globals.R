@@ -6,11 +6,12 @@
 
 
 select <- dplyr::select
+AGECUTOFF <- 18
 
 PROJDIR <- getwd()
 
 # Global caption for all figures
-CAPTION <- "Source: 2021 FinAccess household survey (Nationally representative sample of 20,909  adults ages 18 and above)."
+CAPTION <- str_wrap("Source: 2019 and 2021 FinAccess household survey (Nationally representative sample of 8,267 adults (ages 18+) in 2019 and 20,909 adults (18+) in 2021.", 125)
 
 INDICATORS_REFLIST_LVL_BORR <- c(
   "total" = "Population", 
@@ -245,7 +246,7 @@ names(pal_lender_agg0) <- INDICATORS_REFLIST_LVL_LOAN[str_detect(names(INDICATOR
 pal_lender_agg1 <- c("#0868ac", "#B3DEE2", "#8ED081", "#f03b20", "#fd8d3c", "#fecc5c",  "#E2AEDD", "grey80")
 names(pal_lender_agg1) <- INDICATORS_REFLIST_LVL_LOAN[str_detect(names(INDICATORS_REFLIST_LVL_LOAN), paste("lender_agg1_", collapse = '|'))]
 
-pal_lender_agg3 <- c("#0868ac", "#43a2ca", "#B3DEE2", "#E2AEDD", "#E27396", "#8ED081", "#bd0026", "#f03b20", "#fd8d3c", "#fecc5c", "#ffffb2", "grey80",  "grey80", "grey80")
+pal_lender_agg3 <- c("#0868ac", "#43a2ca", "#B3DEE2", "#3BCEAC", "#E27396", "#8ED081", "#f03b20", "#fd8d3c", "#fecc5c", "#E2AEDD", "#ffffb2", "grey80",  "grey80", "grey80")
 names(pal_lender_agg3) <- INDICATORS_REFLIST_LVL_LOAN[str_detect(names(INDICATORS_REFLIST_LVL_LOAN), paste("lender_agg3_", collapse = '|'))]
 
 pal_wealth <- c("#F25C54", "#F4845F", "#F7B267")

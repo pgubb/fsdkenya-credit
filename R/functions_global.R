@@ -3,17 +3,17 @@
 # Global functions
 
 # Loads in raw (original) data
-get_raw_data_fromfile <- function(year, filename) {
+get_raw_data_fromfile <- function(year, filename, agecutoff) {
   # Opening file, subsetting to adults over the age of 18 and dropping pre-existing financial health indicators
   if (year == 2021) {
     path <- paste(PROJDIR, "data", year, filename, sep = "/")
-    data <- read_sav(path) %>% filter(A19 >= 18) %>% dplyr::select(-starts_with("mfhi")) %>% mutate(year = year, year_fct = as.character(year))
+    data <- read_sav(path) %>% filter(A19 >= agecutoff) %>% dplyr::select(-starts_with("mfhi")) %>% mutate(year = year, year_fct = as.character(year))
   }
 
   if (year == 2019) {
     path <- paste(PROJDIR, "data", year, filename, sep = "/")
     data <- read_sav(path) %>%
-      filter(a13 >= 18) %>%
+      filter(a13 >= agecutoff) %>%
       dplyr::rename(
         e1q1 = e11,
         e1q2 = e12,
@@ -123,17 +123,17 @@ prep_loans_data <- function(data, borrower_data) {
 
 # Prepares
 prep_respdebt_data <- function(borrower_data, loans_data, lendervar) {
-
+  
   lendervar <- sym(lendervar)
 
   alladults <- borrower_data %>% select(mem_id) 
   characteristics <- borrower_data %>% select(year, year_fct, mem_id, psu, probweights, hh_urbrur, hh_wlth_group, resp_gender_fct, resp_income_w_pred, resp_income_quintile)
 
   balances <- loans_data %>%
-    select(mem_id, !!lendervar, nloans_pastyear, loan_principal, loan_balance) %>%
+    select(mem_id, !!lendervar, nloans_pastyear_mod, loan_principal, loan_balance) %>%
     group_by(mem_id, !!lendervar) %>%
     summarize(
-      nloans_pastyear = sum(nloans_pastyear, na.rm = TRUE),
+      nloans_pastyear = sum(nloans_pastyear_mod, na.rm = TRUE),
       loan_principal = sum(loan_principal, na.rm = TRUE),
       debt_balance = sum(loan_balance, na.rm = TRUE)
     ) %>% ungroup()
@@ -150,26 +150,27 @@ prep_respdebt_data <- function(borrower_data, loans_data, lendervar) {
   debt_all_sources <- debt_by_source %>%
     group_by(mem_id) %>%
     summarize(
-      nloans_past_year = sum(nloans_pastyear), 
-      loan_principal = sum(loan_principal),
-      debt_balance = sum(debt_balance)) %>%
+      nloans_pastyear = sum(nloans_pastyear, na.rm = TRUE), 
+      loan_principal = sum(loan_principal, na.rm = TRUE),
+      debt_balance = sum(debt_balance, na.rm = TRUE)) %>%
     mutate(!!lendervar := "All sources")
 
   analysis_data <-
     bind_rows(debt_by_source, debt_all_sources) %>%
-    left_join(characteristics, by = c("mem_id")) %>%
+    left_join(characteristics, by = c("mem_id"))
+  
+  analysis_data <- analysis_data %>%
     mutate(
       fullsample = "All adults",
-      nloans_pastyear = ifelse(is.na(nloans_pastyear), 0, nloans_pastyear),
       has_recent_loan = ifelse(loan_principal > 0, 1, 0),
       has_debt = ifelse(debt_balance > 0, 1, 0),
       debt_balance_income = debt_balance/ifelse(resp_income_w_pred == 0, 1, resp_income_w_pred),
       debt_high = ifelse(debt_balance_income > 0.5, 1, 0),
-      # Conditional on having debt
+      # Conditional on having a recent loan
       nloans_pastyear_cd = ifelse(has_recent_loan == 0, NA, nloans_pastyear), 
       loan_principal_cd = ifelse(has_recent_loan == 0, NA, loan_principal),
-      debt_balance_cd = ifelse(has_debt == 0, NA, debt_balance),
-      debt_balance_income_cd = ifelse(has_debt == 0, NA, debt_balance_income),
+      debt_balance_cd = ifelse(has_recent_loan == 0, NA, debt_balance),
+      debt_balance_income_cd = ifelse(has_recent_loan == 0, NA, debt_balance_income),
       debt_high_cd = ifelse(debt_balance_income_cd > 0.5, 1, 0)
     )
 
